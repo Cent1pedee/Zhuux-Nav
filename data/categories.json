@@ -1,0 +1,63 @@
+[
+  {
+    "id": "dev-tools",
+    "name": "开发工具",
+    "description": "代码托管、接口调试、在线沙盒与包管理",
+    "subcategories": [
+      { "id": "git", "name": "代码托管" },
+      { "id": "api", "name": "API 调试" },
+      { "id": "online", "name": "在线工具" },
+      { "id": "pkg", "name": "包管理" }
+    ]
+  },
+  {
+    "id": "design",
+    "name": "设计资源",
+    "description": "设计协作、素材图库与灵感社区",
+    "subcategories": [
+      { "id": "tool", "name": "设计工具" },
+      { "id": "asset", "name": "素材图库" },
+      { "id": "inspiration", "name": "灵感社区" }
+    ]
+  },
+  {
+    "id": "cloud",
+    "name": "云服务",
+    "description": "云平台、部署托管与监控运维",
+    "subcategories": [
+      { "id": "platform", "name": "云平台" },
+      { "id": "deploy", "name": "部署托管" },
+      { "id": "ops", "name": "监控运维" }
+    ]
+  },
+  {
+    "id": "community",
+    "name": "社区",
+    "description": "技术社区、行业资讯与问答讨论",
+    "subcategories": [
+      { "id": "forum", "name": "技术社区" },
+      { "id": "news", "name": "资讯媒体" },
+      { "id": "qa", "name": "问答讨论" }
+    ]
+  },
+  {
+    "id": "ai",
+    "name": "AI 工具",
+    "description": "对话模型、编程助手与生成式工具",
+    "subcategories": [
+      { "id": "chat", "name": "对话模型" },
+      { "id": "code", "name": "编程助手" },
+      { "id": "image", "name": "图像生成" }
+    ]
+  },
+  {
+    "id": "docs",
+    "name": "学习文档",
+    "description": "官方文档、系统课程与在线手册",
+    "subcategories": [
+      { "id": "docs", "name": "官方文档" },
+      { "id": "course", "name": "教程课程" },
+      { "id": "book", "name": "在线手册" }
+    ]
+  }
+]

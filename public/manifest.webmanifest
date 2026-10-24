@@ -1,0 +1,19 @@
+{
+  "name": "宇宙无敌导航 · 3 秒找到你要的技术站点",
+  "short_name": "宇宙导航",
+  "description": "面向技术从业者的高效导航页：精选开发工具、设计资源、云服务、社区与 AI 工具，支持分类过滤、全局搜索、收藏与深浅色主题。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0F",
+  "theme_color": "#0A0A0F",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,696 @@
+[
+  {
+    "id": "github",
+    "name": "GitHub",
+    "url": "https://github.com",
+    "description": "全球最大的代码托管平台，开源协作与 CI/CD 的事实标准。",
+    "category": "dev-tools",
+    "subcategory": "git",
+    "tags": ["代码托管", "开源", "CI/CD"],
+    "featured": true
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab",
+    "url": "https://gitlab.com",
+    "description": "一体化 DevOps 平台，内置仓库、流水线与制品库。",
+    "category": "dev-tools",
+    "subcategory": "git",
+    "tags": ["代码托管", "DevOps", "私有部署"]
+  },
+  {
+    "id": "gitee",
+    "name": "Gitee",
+    "url": "https://gitee.com",
+    "description": "国内代码托管平台，访问稳定，适合团队协作与开源项目。",
+    "category": "dev-tools",
+    "subcategory": "git",
+    "tags": ["代码托管", "国内", "开源"]
+  },
+  {
+    "id": "bitbucket",
+    "name": "Bitbucket",
+    "url": "https://bitbucket.org",
+    "description": "Atlassian 旗下代码托管服务，与 Jira、Confluence 深度集成。",
+    "category": "dev-tools",
+    "subcategory": "git",
+    "tags": ["代码托管", "Atlassian"]
+  },
+  {
+    "id": "postman",
+    "name": "Postman",
+    "url": "https://www.postman.com",
+    "description": "接口调试与 API 协作平台，支持集合、环境与自动化测试。",
+    "category": "dev-tools",
+    "subcategory": "api",
+    "tags": ["API", "调试", "协作"],
+    "featured": true
+  },
+  {
+    "id": "hoppscotch",
+    "name": "Hoppscotch",
+    "url": "https://hoppscotch.io",
+    "description": "开源轻量 API 调试工具，打开即用，支持 WebSocket 与 GraphQL。",
+    "category": "dev-tools",
+    "subcategory": "api",
+    "tags": ["API", "开源", "GraphQL"]
+  },
+  {
+    "id": "apifox",
+    "name": "Apifox",
+    "url": "https://apifox.com",
+    "description": "API 文档、调试、Mock 与自动化测试一体化协作工具。",
+    "category": "dev-tools",
+    "subcategory": "api",
+    "tags": ["API", "Mock", "文档"]
+  },
+  {
+    "id": "swagger-editor",
+    "name": "Swagger Editor",
+    "url": "https://editor.swagger.io",
+    "description": "在线编写与校验 OpenAPI 规范，实时预览接口文档。",
+    "category": "dev-tools",
+    "subcategory": "api",
+    "tags": ["OpenAPI", "文档", "在线"]
+  },
+  {
+    "id": "codepen",
+    "name": "CodePen",
+    "url": "https://codepen.io",
+    "description": "前端代码在线演示与分享社区，适合快速验证交互原型。",
+    "category": "dev-tools",
+    "subcategory": "online",
+    "tags": ["在线编辑器", "前端", "原型"]
+  },
+  {
+    "id": "stackblitz",
+    "name": "StackBlitz",
+    "url": "https://stackblitz.com",
+    "description": "浏览器内运行完整 Node.js 环境，秒开全栈项目。",
+    "category": "dev-tools",
+    "subcategory": "online",
+    "tags": ["在线编辑器", "Node.js", "全栈"]
+  },
+  {
+    "id": "regexr",
+    "name": "RegExr",
+    "url": "https://regexr.com",
+    "description": "正则表达式在线测试与解释，实时高亮匹配结果。",
+    "category": "dev-tools",
+    "subcategory": "online",
+    "tags": ["正则", "在线工具", "调试"]
+  },
+  {
+    "id": "caniuse",
+    "name": "Can I use",
+    "url": "https://caniuse.com",
+    "description": "查询 Web 特性在各浏览器中的兼容性支持情况。",
+    "category": "dev-tools",
+    "subcategory": "online",
+    "tags": ["兼容性", "浏览器", "查询"]
+  },
+  {
+    "id": "npm",
+    "name": "npm",
+    "url": "https://www.npmjs.com",
+    "description": "JavaScript 包管理器的官方仓库，检索依赖与版本信息。",
+    "category": "dev-tools",
+    "subcategory": "pkg",
+    "tags": ["包管理", "JavaScript", "依赖"]
+  },
+  {
+    "id": "pnpm",
+    "name": "pnpm",
+    "url": "https://pnpm.io",
+    "description": "高效的磁盘空间友好型包管理器，严格的依赖隔离。",
+    "category": "dev-tools",
+    "subcategory": "pkg",
+    "tags": ["包管理", "Node.js", "性能"]
+  },
+  {
+    "id": "jsdelivr",
+    "name": "jsDelivr",
+    "url": "https://www.jsdelivr.com",
+    "description": "免费开源的 CDN，加速 npm 与 GitHub 静态资源分发。",
+    "category": "dev-tools",
+    "subcategory": "pkg",
+    "tags": ["CDN", "静态资源", "开源"]
+  },
+  {
+    "id": "unpkg",
+    "name": "unpkg",
+    "url": "https://unpkg.com",
+    "description": "快速访问 npm 上任意文件内容的全球 CDN。",
+    "category": "dev-tools",
+    "subcategory": "pkg",
+    "tags": ["CDN", "npm", "静态资源"]
+  },
+  {
+    "id": "figma",
+    "name": "Figma",
+    "url": "https://www.figma.com",
+    "description": "浏览器端协作设计工具，组件库与设计交付一体化。",
+    "category": "design",
+    "subcategory": "tool",
+    "tags": ["UI 设计", "协作", "原型"],
+    "featured": true
+  },
+  {
+    "id": "canva",
+    "name": "Canva",
+    "url": "https://www.canva.com",
+    "description": "零门槛在线设计平台，模板丰富，适合快速出图。",
+    "category": "design",
+    "subcategory": "tool",
+    "tags": ["在线设计", "模板", "营销图"]
+  },
+  {
+    "id": "penpot",
+    "name": "Penpot",
+    "url": "https://penpot.app",
+    "description": "开源设计与原型协作平台，支持自托管，面向开发友好。",
+    "category": "design",
+    "subcategory": "tool",
+    "tags": ["开源", "设计工具", "自托管"]
+  },
+  {
+    "id": "spline",
+    "name": "Spline",
+    "url": "https://spline.design",
+    "description": "浏览器内 3D 设计工具，可导出交互式 Web 场景。",
+    "category": "design",
+    "subcategory": "tool",
+    "tags": ["3D", "交互设计", "Web"]
+  },
+  {
+    "id": "unsplash",
+    "name": "Unsplash",
+    "url": "https://unsplash.com",
+    "description": "高质量免费商用图库，摄影素材覆盖广泛主题。",
+    "category": "design",
+    "subcategory": "asset",
+    "tags": ["图片", "免费商用", "摄影"]
+  },
+  {
+    "id": "iconify",
+    "name": "Iconify",
+    "url": "https://icon-sets.iconify.design",
+    "description": "聚合 20 万+ 开源图标，可统一检索并复制 SVG。",
+    "category": "design",
+    "subcategory": "asset",
+    "tags": ["图标", "SVG", "开源"]
+  },
+  {
+    "id": "iconfont",
+    "name": "iconfont",
+    "url": "https://www.iconfont.cn",
+    "description": "阿里巴巴矢量图标库，国内团队常用的图标与插画资源。",
+    "category": "design",
+    "subcategory": "asset",
+    "tags": ["图标", "国内", "插画"]
+  },
+  {
+    "id": "lottiefiles",
+    "name": "LottieFiles",
+    "url": "https://lottiefiles.com",
+    "description": "Lottie 动画资源与在线预览，轻量动效直接嵌入 Web。",
+    "category": "design",
+    "subcategory": "asset",
+    "tags": ["动效", "Lottie", "素材"]
+  },
+  {
+    "id": "dribbble",
+    "name": "Dribbble",
+    "url": "https://dribbble.com",
+    "description": "设计师作品社区，适合寻找视觉风格与界面灵感。",
+    "category": "design",
+    "subcategory": "inspiration",
+    "tags": ["灵感", "UI", "作品集"]
+  },
+  {
+    "id": "behance",
+    "name": "Behance",
+    "url": "https://www.behance.net",
+    "description": "Adobe 旗下创意作品平台，覆盖品牌、插画与工业设计。",
+    "category": "design",
+    "subcategory": "inspiration",
+    "tags": ["灵感", "作品集", "创意"]
+  },
+  {
+    "id": "awwwards",
+    "name": "Awwwards",
+    "url": "https://www.awwwards.com",
+    "description": "评选优秀网站设计的平台，前沿动效与排版参考。",
+    "category": "design",
+    "subcategory": "inspiration",
+    "tags": ["灵感", "网页设计", "动效"]
+  },
+  {
+    "id": "mobbin",
+    "name": "Mobbin",
+    "url": "https://mobbin.com",
+    "description": "真实 App 与网页界面截图库，按流程拆解设计模式。",
+    "category": "design",
+    "subcategory": "inspiration",
+    "tags": ["灵感", "界面", "设计模式"]
+  },
+  {
+    "id": "aliyun",
+    "name": "阿里云",
+    "url": "https://www.aliyun.com",
+    "description": "国内主流公有云，覆盖计算、存储、数据库与 CDN。",
+    "category": "cloud",
+    "subcategory": "platform",
+    "tags": ["云平台", "国内", "ECS"]
+  },
+  {
+    "id": "tencent-cloud",
+    "name": "腾讯云",
+    "url": "https://cloud.tencent.com",
+    "description": "腾讯旗下云服务，音视频与游戏云能力突出。",
+    "category": "cloud",
+    "subcategory": "platform",
+    "tags": ["云平台", "国内", "音视频"]
+  },
+  {
+    "id": "aws",
+    "name": "AWS",
+    "url": "https://aws.amazon.com",
+    "description": "亚马逊云科技，全球覆盖最广的公有云服务体系。",
+    "category": "cloud",
+    "subcategory": "platform",
+    "tags": ["云平台", "全球", "S3"]
+  },
+  {
+    "id": "cloudflare",
+    "name": "Cloudflare",
+    "url": "https://www.cloudflare.com",
+    "description": "CDN、DNS 与边缘计算平台，安全防护与加速一体。",
+    "category": "cloud",
+    "subcategory": "platform",
+    "tags": ["CDN", "DNS", "边缘计算"],
+    "featured": true
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel",
+    "url": "https://vercel.com",
+    "description": "前端部署平台，Git 推送即上线，边缘网络全球分发。",
+    "category": "cloud",
+    "subcategory": "deploy",
+    "tags": ["部署", "前端", "Edge"],
+    "featured": true
+  },
+  {
+    "id": "netlify",
+    "name": "Netlify",
+    "url": "https://www.netlify.com",
+    "description": "静态站点托管与 Serverless 函数平台，构建流程简单。",
+    "category": "cloud",
+    "subcategory": "deploy",
+    "tags": ["部署", "静态站点", "Serverless"]
+  },
+  {
+    "id": "cloudflare-pages",
+    "name": "Cloudflare Pages",
+    "url": "https://pages.cloudflare.com",
+    "description": "免费静态站点托管，与 Workers 无缝衔接。",
+    "category": "cloud",
+    "subcategory": "deploy",
+    "tags": ["部署", "静态站点", "免费"]
+  },
+  {
+    "id": "railway",
+    "name": "Railway",
+    "url": "https://railway.com",
+    "description": "面向开发者的应用托管平台，数据库与后端一键部署。",
+    "category": "cloud",
+    "subcategory": "deploy",
+    "tags": ["部署", "后端", "数据库"]
+  },
+  {
+    "id": "grafana",
+    "name": "Grafana",
+    "url": "https://grafana.com",
+    "description": "开源可视化监控平台，统一展示指标、日志与链路。",
+    "category": "cloud",
+    "subcategory": "ops",
+    "tags": ["监控", "可视化", "开源"]
+  },
+  {
+    "id": "sentry",
+    "name": "Sentry",
+    "url": "https://sentry.io",
+    "description": "应用错误追踪与性能监控，定位线上异常根因。",
+    "category": "cloud",
+    "subcategory": "ops",
+    "tags": ["错误追踪", "APM", "告警"]
+  },
+  {
+    "id": "datadog",
+    "name": "Datadog",
+    "url": "https://www.datadoghq.com",
+    "description": "云原生可观测性平台，指标、日志与追踪统一分析。",
+    "category": "cloud",
+    "subcategory": "ops",
+    "tags": ["可观测性", "APM", "日志"]
+  },
+  {
+    "id": "uptimerobot",
+    "name": "UptimeRobot",
+    "url": "https://uptimerobot.com",
+    "description": "轻量站点可用性监控，宕机即时告警，免费额度充足。",
+    "category": "cloud",
+    "subcategory": "ops",
+    "tags": ["可用性", "监控", "告警"]
+  },
+  {
+    "id": "juejin",
+    "name": "稀土掘金",
+    "url": "https://juejin.cn",
+    "description": "国内开发者技术社区，前端与后端实践文章密集。",
+    "category": "community",
+    "subcategory": "forum",
+    "tags": ["技术社区", "国内", "前端"],
+    "featured": true
+  },
+  {
+    "id": "v2ex",
+    "name": "V2EX",
+    "url": "https://www.v2ex.com",
+    "description": "创意工作者社区，技术、产品与生活方式话题并存。",
+    "category": "community",
+    "subcategory": "forum",
+    "tags": ["社区", "讨论", "独立开发"]
+  },
+  {
+    "id": "segmentfault",
+    "name": "SegmentFault",
+    "url": "https://segmentfault.com",
+    "description": "国内技术问答与专栏社区，覆盖主流开发语言。",
+    "category": "community",
+    "subcategory": "forum",
+    "tags": ["问答", "专栏", "国内"]
+  },
+  {
+    "id": "oschina",
+    "name": "开源中国",
+    "url": "https://www.oschina.net",
+    "description": "国内开源资讯与项目库，追踪国产开源生态动态。",
+    "category": "community",
+    "subcategory": "forum",
+    "tags": ["开源", "资讯", "国内"]
+  },
+  {
+    "id": "hackernews",
+    "name": "Hacker News",
+    "url": "https://news.ycombinator.com",
+    "description": "YC 旗下技术资讯社区，工程师视角的全球热点。",
+    "category": "community",
+    "subcategory": "news",
+    "tags": ["资讯", "技术", "全球"]
+  },
+  {
+    "id": "infoq",
+    "name": "InfoQ",
+    "url": "https://www.infoq.cn",
+    "description": "面向架构师的技术媒体，深度报道工程实践与趋势。",
+    "category": "community",
+    "subcategory": "news",
+    "tags": ["资讯", "架构", "技术媒体"]
+  },
+  {
+    "id": "sspai",
+    "name": "少数派",
+    "url": "https://sspai.com",
+    "description": "效率工具与数字生活内容平台，软件评测质量高。",
+    "category": "community",
+    "subcategory": "news",
+    "tags": ["效率", "评测", "数字生活"]
+  },
+  {
+    "id": "github-trending",
+    "name": "GitHub Trending",
+    "url": "https://github.com/trending",
+    "description": "每日热门开源仓库榜单，发现值得关注的新项目。",
+    "category": "community",
+    "subcategory": "news",
+    "tags": ["开源", "趋势", "榜单"]
+  },
+  {
+    "id": "stackoverflow",
+    "name": "Stack Overflow",
+    "url": "https://stackoverflow.com",
+    "description": "全球最大编程问答社区，报错信息几乎都能搜到答案。",
+    "category": "community",
+    "subcategory": "qa",
+    "tags": ["问答", "编程", "排错"],
+    "featured": true
+  },
+  {
+    "id": "zhihu",
+    "name": "知乎",
+    "url": "https://www.zhihu.com",
+    "description": "中文问答社区，技术话题讨论与经验分享丰富。",
+    "category": "community",
+    "subcategory": "qa",
+    "tags": ["问答", "中文", "经验"]
+  },
+  {
+    "id": "reddit",
+    "name": "Reddit",
+    "url": "https://www.reddit.com",
+    "description": "大型兴趣社区，r/programming 等板块讨论活跃。",
+    "category": "community",
+    "subcategory": "qa",
+    "tags": ["社区", "讨论", "英文"]
+  },
+  {
+    "id": "devto",
+    "name": "DEV Community",
+    "url": "https://dev.to",
+    "description": "开发者写作社区，教程与实战经验更新频繁。",
+    "category": "community",
+    "subcategory": "qa",
+    "tags": ["写作", "教程", "社区"]
+  },
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "url": "https://chatgpt.com",
+    "description": "OpenAI 对话式 AI 助手，通用问答与代码生成。",
+    "category": "ai",
+    "subcategory": "chat",
+    "tags": ["对话", "AI", "OpenAI"],
+    "featured": true
+  },
+  {
+    "id": "claude",
+    "name": "Claude",
+    "url": "https://claude.ai",
+    "description": "Anthropic 推出的 AI 助手，长文本理解与写作表现突出。",
+    "category": "ai",
+    "subcategory": "chat",
+    "tags": ["对话", "AI", "长文本"]
+  },
+  {
+    "id": "tongyi",
+    "name": "通义千问",
+    "url": "https://tongyi.aliyun.com",
+    "description": "阿里云大模型助手，中文理解与办公场景适配良好。",
+    "category": "ai",
+    "subcategory": "chat",
+    "tags": ["对话", "国内", "大模型"]
+  },
+  {
+    "id": "kimi",
+    "name": "Kimi",
+    "url": "https://kimi.moonshot.cn",
+    "description": "月之暗面推出的长上下文助手，适合长文档阅读。",
+    "category": "ai",
+    "subcategory": "chat",
+    "tags": ["对话", "国内", "长上下文"]
+  },
+  {
+    "id": "github-copilot",
+    "name": "GitHub Copilot",
+    "url": "https://github.com/features/copilot",
+    "description": "IDE 内 AI 结对编程，补全、问答与代码审查一体。",
+    "category": "ai",
+    "subcategory": "code",
+    "tags": ["编程助手", "补全", "IDE"]
+  },
+  {
+    "id": "cursor",
+    "name": "Cursor",
+    "url": "https://cursor.com",
+    "description": "AI 优先的代码编辑器，支持多文件重构与对话式开发。",
+    "category": "ai",
+    "subcategory": "code",
+    "tags": ["编辑器", "AI", "重构"],
+    "featured": true
+  },
+  {
+    "id": "windsurf",
+    "name": "Windsurf",
+    "url": "https://windsurf.com",
+    "description": "智能体驱动的 IDE，可自主完成跨文件编码任务。",
+    "category": "ai",
+    "subcategory": "code",
+    "tags": ["IDE", "Agent", "编程"]
+  },
+  {
+    "id": "lingma",
+    "name": "通义灵码",
+    "url": "https://lingma.aliyun.com",
+    "description": "阿里云智能编码助手，支持主流 IDE 与中文注释。",
+    "category": "ai",
+    "subcategory": "code",
+    "tags": ["编程助手", "国内", "IDE"]
+  },
+  {
+    "id": "midjourney",
+    "name": "Midjourney",
+    "url": "https://www.midjourney.com",
+    "description": "高质量 AI 绘画工具，擅长风格化视觉与概念图。",
+    "category": "ai",
+    "subcategory": "image",
+    "tags": ["绘画", "AI", "视觉"]
+  },
+  {
+    "id": "stability",
+    "name": "Stability AI",
+    "url": "https://stability.ai",
+    "description": "Stable Diffusion 官方平台，开源图像生成模型生态。",
+    "category": "ai",
+    "subcategory": "image",
+    "tags": ["开源", "图像生成", "模型"]
+  },
+  {
+    "id": "jimeng",
+    "name": "即梦",
+    "url": "https://jimeng.jianying.com",
+    "description": "字节跳动 AI 创作平台，文生图与视频生成一体。",
+    "category": "ai",
+    "subcategory": "image",
+    "tags": ["国内", "文生图", "视频"]
+  },
+  {
+    "id": "recraft",
+    "name": "Recraft",
+    "url": "https://www.recraft.ai",
+    "description": "面向设计师的 AI 绘图工具，支持矢量与品牌风格。",
+    "category": "ai",
+    "subcategory": "image",
+    "tags": ["矢量", "设计", "AI"]
+  },
+  {
+    "id": "mdn",
+    "name": "MDN Web Docs",
+    "url": "https://developer.mozilla.org",
+    "description": "最权威的 Web 技术文档，覆盖 HTML、CSS 与 JS 标准。",
+    "category": "docs",
+    "subcategory": "docs",
+    "tags": ["文档", "Web", "标准"],
+    "featured": true
+  },
+  {
+    "id": "react",
+    "name": "React 文档",
+    "url": "https://react.dev",
+    "description": "React 官方新文档，以示例驱动讲解 Hooks 与并发特性。",
+    "category": "docs",
+    "subcategory": "docs",
+    "tags": ["文档", "React", "前端"]
+  },
+  {
+    "id": "nextjs",
+    "name": "Next.js 文档",
+    "url": "https://nextjs.org/docs",
+    "description": "Next.js 官方文档，App Router 与渲染策略详解。",
+    "category": "docs",
+    "subcategory": "docs",
+    "tags": ["文档", "Next.js", "SSR"]
+  },
+  {
+    "id": "tailwind",
+    "name": "Tailwind CSS",
+    "url": "https://tailwindcss.com",
+    "description": "原子化 CSS 框架官方文档，附完整设计 token 参考。",
+    "category": "docs",
+    "subcategory": "docs",
+    "tags": ["文档", "CSS", "设计系统"]
+  },
+  {
+    "id": "runoob",
+    "name": "菜鸟教程",
+    "url": "https://www.runoob.com",
+    "description": "中文入门教程集合，语法速查与在线运行示例。",
+    "category": "docs",
+    "subcategory": "course",
+    "tags": ["教程", "中文", "入门"]
+  },
+  {
+    "id": "freecodecamp",
+    "name": "freeCodeCamp",
+    "url": "https://www.freecodecamp.org",
+    "description": "免费编程课程与项目实战，覆盖前端到数据科学。",
+    "category": "docs",
+    "subcategory": "course",
+    "tags": ["课程", "免费", "实战"]
+  },
+  {
+    "id": "geekbang",
+    "name": "极客时间",
+    "url": "https://time.geekbang.org",
+    "description": "面向工程师的付费专栏与视频课，体系化进阶内容。",
+    "category": "docs",
+    "subcategory": "course",
+    "tags": ["课程", "进阶", "国内"]
+  },
+  {
+    "id": "coursera",
+    "name": "Coursera",
+    "url": "https://www.coursera.org",
+    "description": "全球高校在线课程平台，计算机科学课程体系完整。",
+    "category": "docs",
+    "subcategory": "course",
+    "tags": ["课程", "高校", "英文"]
+  },
+  {
+    "id": "liaoxuefeng",
+    "name": "廖雪峰的官方网站",
+    "url": "https://liaoxuefeng.com",
+    "description": "中文编程教程经典站点，Python、Java 与 Git 教程易懂。",
+    "category": "docs",
+    "subcategory": "book",
+    "tags": ["手册", "中文", "教程"]
+  },
+  {
+    "id": "ruanyifeng-es6",
+    "name": "ES6 入门教程",
+    "url": "https://es6.ruanyifeng.com",
+    "description": "阮一峰所著 ECMAScript 6 教程，前端面试常备参考。",
+    "category": "docs",
+    "subcategory": "book",
+    "tags": ["JavaScript", "ES6", "手册"]
+  },
+  {
+    "id": "missing-semester",
+    "name": "计算机教育中缺失的一课",
+    "url": "https://missing-semester-cn.github.io",
+    "description": "MIT 开设的命令行、Git 与工具链实战课程中文版。",
+    "category": "docs",
+    "subcategory": "book",
+    "tags": ["命令行", "Git", "课程"]
+  },
+  {
+    "id": "ts-handbook",
+    "name": "TypeScript 中文手册",
+    "url": "https://www.typescriptlang.org/zh/docs/handbook",
+    "description": "TypeScript 官方中文手册，类型系统与工程配置指南。",
+    "category": "docs",
+    "subcategory": "book",
+    "tags": ["TypeScript", "中文", "手册"]
+  }
+]

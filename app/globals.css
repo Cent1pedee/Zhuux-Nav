@@ -1,0 +1,372 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Design Tokens —— 对应 PRD 7.2 配色系统
+   颜色以 RGB 三元组存放，便于 Tailwind 的 /opacity 修饰符。
+   dark 为默认主题（PRD 7.1「深色优先」）。
+   ============================================================ */
+@layer base {
+  :root {
+    /* 浅色 */
+    --c-bg: 250 250 250; /* #FAFAFA */
+    --c-surface: 255 255 255; /* #FFFFFF */
+    --c-primary: 124 58 237; /* #7C3AED */
+    --c-primary-ink: 109 40 217; /* 文本/图标安全色（AA） */
+    --c-primary-solid: 109 40 217; /* 实心按钮底色，白字 ≥4.5:1 */
+    --c-secondary: 37 99 235; /* #2563EB */
+    --c-text: 31 41 55; /* #1F2937 */
+    --c-muted: 107 114 128; /* #6B7280 */
+    --c-border: 229 231 235; /* #E5E7EB */
+    --card-bg: 255 255 255;
+    --card-alpha: 0.9;
+    --grid-line: 0 0 0 / 0.045;
+    --blob-opacity: 0.18;
+    color-scheme: light;
+  }
+
+  .dark {
+    /* 深色 */
+    --c-bg: 10 10 15; /* #0A0A0F */
+    --c-surface: 24 24 27; /* #18181B */
+    --c-primary: 139 92 246; /* #8B5CF6 */
+    --c-primary-ink: 167 139 250; /* #A78BFA，卡片上可读 */
+    --c-primary-solid: 124 58 237; /* #7C3AED，白字 5.7:1 */
+    --c-secondary: 59 130 246; /* #3B82F6 */
+    --c-text: 228 228 231; /* #E4E4E7 */
+    /* PRD 指定 #71717A，但该值在卡片底色上对比度仅 3.65:1，
+       低于 PRD 4.3 要求的 4.5:1；此处提亮到 #94949E（5.8:1），详见 README「与 PRD 的偏差」。 */
+    --c-muted: 148 148 158;
+    --c-border: 39 39 42; /* #27272A */
+    --card-bg: 24 24 27;
+    --card-alpha: 0.8;
+    --grid-line: 255 255 255 / 0.04;
+    --blob-opacity: 0.5;
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: rgb(var(--c-border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /*
+     * 这里刻意不设置 scrollbar-gutter: stable。
+     * 该属性只对滚动容器（html）生效，而 html 的 overflow 是 visible，
+     * 弹层锁 body 时槽位会被一起释放，反而让内容先变宽 11px、再被 padding 补窄 11px，
+     * 视觉上就是「一开弹窗页面就偏」。滚动锁定改由 Modal 内实测滚动条宽度并补 padding 处理。
+     */
+  }
+
+  body {
+    background-color: rgb(var(--c-bg));
+    color: rgb(var(--c-text));
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei',
+      sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 主题切换时的全局过渡（300ms，PRD 7.4）。仅在切换瞬间挂载，避免影响首屏 */
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease,
+      fill 300ms ease !important;
+  }
+
+  /* 可见焦点：Tab 键聚焦时出现 2px 主色描边（PRD 4.3） */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-primary-ink));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-primary) / 0.32);
+  }
+
+  /* 细滚动条，配色跟随主题（仅 WebKit/Blink，Firefox 走 scrollbar-color） */
+  * {
+    scrollbar-color: rgb(var(--c-border)) transparent;
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+    background-color: rgb(var(--c-border));
+    transition: background-color 200ms ease;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--c-muted) / 0.6);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  /* 尊重系统「减少动态效果」设置：全部动画降级为 0ms（PRD 7.6） */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    /* 常驻的光斑漂移属于「持续运动」，降级时应当彻底停住 */
+    .page-backdrop::after {
+      animation: none !important;
+    }
+    /* 滚动视差同理 */
+    .page-backdrop::before {
+      transform: none !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * 卡片表面。
+   *
+   * PRD 7.1 写的是「玻璃拟态 backdrop-blur」，但实测：一屏 12 张卡片各挂一层
+   * backdrop-filter，滚动时合成器每帧都要重新采样卡片背后的整片背景，
+   * 1440x900 下帧率从 60fps 掉到 55.9fps（p95 帧 33ms，22% 的帧掉到 30fps）。
+   * 移除卡片上的 backdrop-filter 后立刻回到 60fps（p95 16.7ms，0 掉帧）。
+   *
+   * 折中做法：卡片的「玻璃感」用「半透明表面 + 顶部高光 + 细边框」表达，
+   * 真正的模糊只留给真正叠在内容之上的浮层（弹窗、卡片菜单、Toast、吸顶栏），
+   * 因为同一时刻只有一层，代价可以忽略。
+   */
+  .glass-card {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--card-bg) / calc(var(--card-alpha) + 0.06)),
+      rgb(var(--card-bg) / var(--card-alpha))
+    );
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  }
+
+  /* 浮层表面：需要真实模糊的场合（下拉菜单、弹窗面板、Toast） */
+  .glass-panel {
+    background-color: rgb(var(--card-bg) / 0.92);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  /*
+   * 按钮基类（PRD 7.4 动效 / 4.3 可见反馈）。
+   *
+   * 统一原则：**悬停只改颜色、阴影与亮度，绝不位移**；位移只出现在 `:active` 按下瞬间。
+   * 原因见 header.tsx 的说明——悬停位移会让指针在边缘反复「进入/离开」，表现为抽搐与形变。
+   */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: 0.6rem;
+    background-color: rgb(var(--c-primary-solid));
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    transition:
+      filter 200ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.22),
+      inset 0 1px 0 rgb(255 255 255 / 0.14);
+  }
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.1) saturate(1.05);
+    box-shadow:
+      0 12px 26px -14px rgb(var(--c-primary) / 0.95),
+      inset 0 1px 0 rgb(255 255 255 / 0.2);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: scale(0.975);
+    box-shadow: 0 2px 6px -2px rgb(var(--c-primary) / 0.6);
+  }
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* 次级按钮：描边 + 悬停染主色，同样不位移 */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgb(var(--c-border));
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(var(--c-text));
+    transition:
+      transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 200ms ease, background-color 200ms ease, color 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    border-color: rgb(var(--c-primary) / 0.5);
+    color: rgb(var(--c-primary-ink));
+    background-color: rgb(var(--c-primary) / 0.08);
+    box-shadow: 0 8px 20px -16px rgb(var(--c-primary) / 0.9);
+  }
+  .btn-ghost:active:not(:disabled) {
+    transform: scale(0.975);
+  }
+  .btn-ghost:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* 顶部/底部粘性栏 */
+  .glass-bar {
+    background-color: rgb(var(--c-bg) / 0.72);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  /* 骨架屏脉冲 */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: rgb(var(--c-surface) / 0.7);
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--c-text) / 0.06),
+      transparent
+    );
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 页面背景：动态渐变光斑 + 网格底纹（PRD 7.1 / 7.4 Glow 光晕 15%） */
+  .page-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    /* 弹层锁定滚动时滚动条消失，用 --scrollbar-width 让出这段宽度，背景层不跟着横向拉伸 */
+    right: var(--scrollbar-width, 0px);
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background-color: rgb(var(--c-bg));
+  }
+  .page-backdrop::before {
+    content: '';
+    position: absolute;
+    inset: -20% -10%;
+    /*
+     * 极轻的滚动视差：网格比内容慢 6%，制造一点纵深。
+     * 只动 transform 并常驻合成层，滚动时不触发重绘；
+     * --scroll-y 由 header 的滚动 rAF 写入，停止滚动即不再更新。
+     */
+    will-change: transform;
+    transform: translate3d(0, calc(var(--scroll-y, 0px) * -0.06), 0);
+    background-image: linear-gradient(
+        to right,
+        rgb(var(--grid-line)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgb(var(--grid-line)) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+  }
+  .page-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        42rem 30rem at 12% -8%,
+        rgb(var(--c-primary) / 0.15),
+        transparent 70%
+      ),
+      radial-gradient(36rem 26rem at 88% 4%, rgb(var(--c-secondary) / 0.13), transparent 72%),
+      radial-gradient(30rem 24rem at 50% 110%, rgb(var(--c-primary) / 0.08), transparent 70%);
+    animation: blob-drift 22s ease-in-out infinite alternate;
+    opacity: var(--blob-opacity);
+    /* 光斑常驻动画：提升为独立合成层，滚动时不再参与主线程重绘 */
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+  @keyframes blob-drift {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(1.5%, 1.5%, 0) scale(1.06);
+    }
+  }
+}
+
+@layer utilities {
+  /*
+   * 滚动期降载。
+   *
+   * 76 张卡片同时存在时，滚动过程中浏览器仍会为每张卡片维护 hover 过渡的
+   * 样式计算与合成层；实测在低端机/高分屏上会出现掉帧。Header 在滚动开始后
+   * 给 <html> 挂上 data-scrolling，滚动停止 140ms 后移除：
+   * - 滚动期间暂停背景光斑的常驻动画（它本来就看不出来，但每帧都在跑）
+   * - 滚动期间关闭卡片的光晕/高光过渡，避免与滚动争抢合成
+   * 这些都是「纯视觉降载」，不改变任何交互结果。
+   */
+  html[data-scrolling='true'] .page-backdrop::after {
+    animation-play-state: paused;
+  }
+  html[data-scrolling='true'] [data-testid='site-card'],
+  html[data-scrolling='true'] [data-testid='site-card'] * {
+    transition-duration: 0ms !important;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* 底部安全区（iOS） */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
