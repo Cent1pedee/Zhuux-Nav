@@ -140,7 +140,7 @@
       animation: none !important;
     }
     /* 滚动视差同理 */
-    .page-backdrop::before {
+    .page-backdrop-grid {
       transform: none !important;
     }
   }
@@ -294,24 +294,17 @@
     overflow: hidden;
     background-color: rgb(var(--c-bg));
   }
-  .page-backdrop::before {
-    content: '';
+  /*
+   * 网格底纹层：实际线条由 Magic UI 的 GridPattern（SVG <pattern>）画在子元素里，
+   * 这里只负责「比内容慢 6% 的视差」和「向下渐隐」。
+   * 只动 transform 并常驻合成层，滚动时不触发重绘；
+   * --scroll-y 由 PageBackdrop 的滚动 rAF 写入，停止滚动即不再更新。
+   */
+  .page-backdrop-grid {
     position: absolute;
     inset: -20% -10%;
-    /*
-     * 极轻的滚动视差：网格比内容慢 6%，制造一点纵深。
-     * 只动 transform 并常驻合成层，滚动时不触发重绘；
-     * --scroll-y 由 header 的滚动 rAF 写入，停止滚动即不再更新。
-     */
     will-change: transform;
     transform: translate3d(0, calc(var(--scroll-y, 0px) * -0.06), 0);
-    background-image: linear-gradient(
-        to right,
-        rgb(var(--grid-line)) 1px,
-        transparent 1px
-      ),
-      linear-gradient(to bottom, rgb(var(--grid-line)) 1px, transparent 1px);
-    background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
     -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
   }

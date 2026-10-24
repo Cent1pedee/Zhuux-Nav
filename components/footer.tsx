@@ -7,6 +7,7 @@ import { useAppStore } from '@/components/providers/app-store';
 import { useUi } from '@/components/providers/ui';
 import { PrivacyDialog } from '@/components/dialogs';
 import { MailIcon, LogoMark } from '@/components/icons';
+import { NumberTicker } from '@/components/magicui/number-ticker';
 
 /**
  * 页脚：订阅入口（PRD 3.2.4）、隐私政策（PRD 4.7）、外链声明、分类快捷链接。
@@ -28,9 +29,26 @@ export function Footer() {
             <p className="mt-2 max-w-sm text-[13px] leading-5 text-muted">
               {siteConfig.description}
             </p>
+            {/*
+             * 站点数只有客户端拿到数据后才准确（数据是运行时 fetch 的）。
+             * 服务端渲染 / 无 JS 时不要写「当前收录 0 个站点」这种假信息，改说一句不含数字的话。
+             */}
             <p className="mt-3 flex items-center gap-1.5 text-[13px] text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              当前收录 {sites.length} 个站点 · 数据与代码分离，欢迎通过反馈推荐新站点
+              {sites.length > 0 ? (
+                <>
+                  当前收录{' '}
+                  <NumberTicker
+                    value={sites.length}
+                    startValue={0}
+                    duration={1.1}
+                    className="mx-0.5 font-medium text-ink"
+                  />{' '}
+                  个站点 · 数据与代码分离，欢迎通过反馈推荐新站点
+                </>
+              ) : (
+                '精选技术站点 · 数据与代码分离，欢迎通过反馈推荐新站点'
+              )}
             </p>
           </div>
 

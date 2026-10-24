@@ -16,7 +16,7 @@
 | `pnpm build`                  | 校验数据 → 同步数据 → 静态导出到 `out/`            |
 | `pnpm preview`                | 用内置静态服务器预览 `out/`                        |
 | `pnpm check`                  | 数据校验 + 类型检查 + lint + 构建                  |
-| `pnpm test:e2e`               | Playwright 端到端 + axe 无障碍（59 用例 / 67 次执行） |
+| `pnpm test:e2e`               | Playwright 端到端 + axe 无障碍（61 用例 / 69 次执行） |
 | `pnpm test`                   | 数据校验 + 类型检查 + E2E                          |
 
 `pnpm build` 会先跑 `scripts/validate-data.mjs`，数据格式不合法时**构建直接失败**。E2E 使用本机 Google Chrome（`channel: 'chrome'`），无需下载 Playwright 浏览器；若本机无 Chrome，执行 `pnpm exec playwright install chromium` 并把 `playwright.config.ts` 的 `channel` 改为 `'chromium'`。
@@ -36,14 +36,14 @@
 | 主题 light / dark / auto                          | 顶栏循环 + 设置面板三选一；持久化、首次跟随系统、`clip-path` 圆形扩散过渡、inline script 防 FOUC                                     |
 | 布局密度 4 列 / 6 列                              | 设置面板与网格头部切换，`xl` 断点生效并持久化；紧凑下压缩图标/内边距/标签数                                                         |
 | 浏览历史最近 10 条 + 清除                         | 首页「最近浏览」区 + 设置面板，倒序、上限 10、就地清除（二次确认）                                                                  |
-| 推荐位与空态装饰                                  | Magic UI `BorderBeam` 只在 `featured` 卡片上绕边流光（`useInView` 限制为可见时才动画）；空态用 `Meteors` 流星；均 `pointer-events:none` |
+| 推荐位与空态装饰                                  | Magic UI `BorderBeam` 只在 `featured` 卡片上绕边流光（`useInView` 限制为可见时才动画）；空态与搜索无结果用 `Meteors` + `ShineBorder`；背景网格用 `GridPattern`；数字用 `NumberTicker` 滚动；均 `pointer-events:none` / `aria-hidden` |
 
 ## 目录结构
 
 ```
 app/            页面与路由（首页、6 个分类静态路由、privacy、sitemap、robots、404）
 components/     UI 组件（header / category-nav / site-grid / site-card / search-command / dialogs / providers…）
-components/magicui/  Magic UI 装饰组件（border-beam / meteors，已改写为 Tailwind 3 语法）
+components/magicui/  Magic UI 装饰组件（border-beam / meteors / grid-pattern / shine-border / blur-fade / number-ticker，已改写为 Tailwind 3 语法）
 lib/            纯逻辑（数据、搜索、存储、埋点、主题、剪贴板）
 data/           categories.json / sites.json
 public/         icons（favicon 缓存）、data（运行时数据）、og.png
@@ -62,13 +62,13 @@ tests/e2e/      Playwright 用例（home / interactions / a11y / privacy-seo / r
 ```bash
 pnpm check              # 数据校验 → tsc → eslint → 静态构建（13 个页面）
 pnpm preview            # 另开终端，http://127.0.0.1:4321
-pnpm test:e2e           # Playwright + axe：桌面端 59 条 + 移动端复跑 8 条响应式 = 67 次执行
+pnpm test:e2e           # Playwright + axe：桌面端 61 条 + 移动端复跑 8 条响应式 = 69 次执行
 pnpm test:e2e:ui        # 可视化调试
 ```
 
 | 文件                             | 条数 | 覆盖                                                                                                                         |
 | -------------------------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `tests/e2e/home.spec.ts`         | 17   | 首屏网格与语义结构、骨架屏、加载失败重试、二级分类单选与返回全部、`?q=` 预填、空态搜索入口、阅读进度条、切分类回顶、主题、密度、Magic UI 装饰层仅推荐位 |
+| `tests/e2e/home.spec.ts`         | 19   | 首屏网格与语义结构、骨架屏、加载失败重试、二级分类单选与返回全部、`?q=` 预填、空态搜索入口、阅读进度条、切分类回顶、主题、密度、Magic UI 装饰层仅推荐位 |
 | `tests/e2e/interactions.spec.ts` | 16   | 搜索键盘与新窗口、⌘K/Esc 焦点归还、埋点、收藏持久化、导入导出、浏览历史、嵌套弹层、分享、订阅、反馈                            |
 | `tests/e2e/a11y.spec.ts`         | 7    | axe 扫描（首页/搜索层/设置层/分类页/隐私页）、Tab 顺序、弹层内 Tab 循环、图标按钮可访问名称                                     |
 | `tests/e2e/privacy-seo.spec.ts`  | 11   | 同意横幅、隐私弹窗与独立页、清除本地数据、`localStorage` 异常降级、meta/OG/JSON-LD、sitemap/robots、404                        |
@@ -88,16 +88,21 @@ pnpm test:e2e:ui        # 可视化调试
 | -------------------------------------------------- | ------------------------------------------- |
 | ![二级分类](docs/screenshots/shot-subcategory.png) | ![移动端](docs/screenshots/shot-mobile.png) |
 
-| 空结果页（Magic UI 流星）                   | 卡片悬停                                    |
-| ------------------------------------------- | ------------------------------------------- |
-| ![空态](docs/screenshots/shot-empty.png)    | ![悬停](docs/screenshots/shot-card-hover.png) |
+| 空结果页（Magic UI 流星 + 描边）            | 搜索无结果（同款描边）                              |
+| ------------------------------------------- | --------------------------------------------------- |
+| ![空态](docs/screenshots/shot-empty.png)    | ![搜索无结果](docs/screenshots/shot-search-empty.png) |
+
+| 卡片悬停（推荐位绕边流光）                  |
+| ------------------------------------------- |
+| ![悬停](docs/screenshots/shot-card-hover.png) |
 
 更多截图见 [`docs/screenshots/`](docs/screenshots)。
 
 ## 已知限制
 
-1. **首屏 JS 约 224KB gzip**（首屏 script 逐文件 gzip 求和，不含 `noModule` polyfills）：主要来自 Next.js App Router + React 19 运行时（约 103KB）与 Motion（约 46KB）。如需更小体积，可换用更轻的运行时。
-2. **只引入 Magic UI，未引入 shadcn/ui**：Magic UI 仅用 `BorderBeam`（推荐位卡片绕边流光）与 `Meteors`（空态流星）两个装饰组件，源码放在 `components/magicui/`，已改写为 Tailwind 3 语法并补 `prefers-reduced-motion` 降级；弹窗、命令面板、Toast、按钮仍是自建，因为现有实现带弹层栈、滚动锁补偿与倒计时条，换成 Radix 版本需重做且体积更大（实测 +46KB gzip）。
+1. **首屏 JS 约 194KB gzip**（`out/index.html` 的 script 逐文件 gzip 求和，排除 `noModule` 的 polyfills 38.5KB）：主要来自 Next.js App Router + React 19 运行时（约 103KB）与 Motion（约 46KB）。如需更小体积，可换用更轻的运行时。
+2. **只引入 Magic UI，未引入 shadcn/ui**：Magic UI 只用 6 个纯装饰组件（`BorderBeam` 推荐位绕边流光、`Meteors` 空态流星、`ShineBorder` 空态与搜索无结果描边、`GridPattern` 背景网格、`BlurFade` 空态淡入、`NumberTicker` 站点数滚动），源码放在 `components/magicui/`，已改写为 Tailwind 3 语法并补 `prefers-reduced-motion` 降级；弹窗、命令面板、Toast、按钮仍是自建，因为现有实现带弹层栈、滚动锁补偿与倒计时条，换成 Radix 版本需重做且体积更大（实测 +46KB gzip）。
 3. **深色模式辅助文字用 `#94949E`**：更深一档的 `#71717A` 在卡片底色 `#18181B` 上对比度仅 3.65:1，达不到 WCAG AA 的 4.5:1。
 4. **收藏拖拽排序未实现**；统计工具仅保留接口与本地缓冲，未接入真实 Umami / Plausible（`siteConfig.analytics.endpoint` 留空）。
 5. **favicon 为构建前抓取到 `public/icons/` 的本地文件**（等价自有 CDN），运行时 `loading="lazy"` + 固定宽高 + 首字母占位兜底。
+6. **无 JS 时只有外壳可用**：站点数据是运行时 `fetch('/data/sites.json')` 拿的，禁用 JS 时卡片区停在骨架屏，页头、页脚、分类链接与 `/privacy/` 仍可访问（有 E2E 守住这条底线）。若要连卡片也能在无 JS 下渲染，需要把数据在构建期灌进页面，代价是每加一个站点都要重新构建。

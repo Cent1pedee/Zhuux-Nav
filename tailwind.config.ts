@@ -93,6 +93,12 @@ const config: Config = {
           from: { transform: 'scaleX(1)' },
           to: { transform: 'scaleX(0)' },
         },
+        // Magic UI ShineBorder：一条 300% 宽的高光沿对角线扫过边框
+        shine: {
+          '0%': { backgroundPosition: '0% 0%' },
+          '50%': { backgroundPosition: '100% 100%' },
+          '100%': { backgroundPosition: '0% 0%' },
+        },
         'star-pop': {
           '0%': { transform: 'scale(1) rotate(0deg)' },
           '45%': { transform: 'scale(1.35) rotate(18deg)' },
@@ -140,6 +146,8 @@ const config: Config = {
         'toast-in': 'toast-in 200ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'toast-out': 'toast-out 200ms ease-in both',
         'toast-progress': 'toast-progress 3200ms linear forwards',
+        /* Magic UI ShineBorder：边框高光扫动 */
+        shine: 'shine var(--duration, 14s) linear infinite',
         'star-pop': 'star-pop 320ms ease-out',
         'tip-in': 'tip-in 160ms cubic-bezier(0.22, 1, 0.36, 1) both',
         reveal: 'reveal 180ms cubic-bezier(0.22, 1, 0.36, 1) both',

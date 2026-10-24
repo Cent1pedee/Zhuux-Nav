@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
+import { GridPattern } from '@/components/magicui/grid-pattern';
+
 /**
  * 页面背景：动态渐变光斑 + 网格底纹（PRD 7.1 / 7.4 Glow 光晕 15%）。
  *
@@ -49,5 +51,17 @@ export function PageBackdrop() {
     };
   }, []);
 
-  return <div ref={ref} aria-hidden="true" className="page-backdrop" />;
+  /*
+   * 网格底纹改用 Magic UI GridPattern（SVG `<pattern>`）：
+   * 一条 `<path>` 描边 + `<rect>` 填充，比「两层 linear-gradient 平铺」少一层合成。
+   * 不用它的 `squares` 高亮：随机点亮的格子会被标题与卡片压住，看着像渲染残留，
+   * 背景保持均匀反而更干净。视差与径向渐隐仍套在外层 div 上（见 globals.css）。
+   */
+  return (
+    <div ref={ref} aria-hidden="true" className="page-backdrop">
+      <div className="page-backdrop-grid">
+        <GridPattern width={48} height={48} />
+      </div>
+    </div>
+  );
 }

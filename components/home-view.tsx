@@ -10,6 +10,7 @@ import { useAppStore } from '@/components/providers/app-store';
 import { useUi } from '@/components/providers/ui';
 import { useToast } from '@/components/providers/toast';
 import { filterSites } from '@/lib/data';
+import { NumberTicker } from '@/components/magicui/number-ticker';
 import { cn } from '@/lib/cn';
 import { StarIcon, ClockIcon, GridIcon, RowsIcon, ArrowUpRightIcon, SearchIcon } from '@/components/icons';
 
@@ -229,10 +230,17 @@ export function HomeView({ lockedCategory, heading, intro }: HomeViewProps) {
               </motion.span>
             </h1>
             <p className="mt-1 text-meta text-muted">
-              {intro ??
-                (hasScope
-                  ? `${visible.length} 个站点 · 点击卡片在新窗口打开`
-                  : `${sites.length} 个站点 · 点击卡片在新窗口打开`)}
+              {intro ?? (
+                <>
+                  {/* 切分类时数字滚动到新值，比整段文字硬替换更容易被眼睛跟上 */}
+                  <NumberTicker
+                    value={hasScope ? visible.length : sites.length}
+                    duration={0.6}
+                    className="font-medium text-ink"
+                  />
+                  {' 个站点 · 点击卡片在新窗口打开'}
+                </>
+              )}
             </p>
           </div>
           <div className="flex items-center gap-1.5">

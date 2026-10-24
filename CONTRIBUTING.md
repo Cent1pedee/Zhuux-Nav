@@ -41,7 +41,10 @@ pnpm test              # 数据校验 + 类型 + E2E（含 axe 无障碍）
   - 图标按钮必须有 `aria-label`；
   - 补充对应 Playwright 用例（含 `data-testid`）。
 - 动效只动画 `transform` / `opacity`，并在 `prefers-reduced-motion: reduce` 下降级为 0ms。
-- 装饰性组件（`components/magicui/`）只允许用在推荐位或空态，必须 `pointer-events-none` 且 `aria-hidden`；新增时同步改写为 Tailwind 3 语法（注册表默认是 v4 的 `bg-linear-to-*` / `mask-intersect` 等）。
+- 装饰性组件（`components/magicui/`）只允许用在推荐位、空态或背景层，必须 `pointer-events-none` 且 `aria-hidden`。
+- 从 Magic UI 注册表取组件时同步改写为 Tailwind 3 语法：`bg-linear-to-*` → `bg-gradient-to-*`、`bg-size-[...]` → `bg-[length:...]`；新 keyframes 必须在 `tailwind.config.ts` 显式声明（内联 `animationName` 不会产出 `@keyframes`）。
+- 带遮罩（mask）的组件两层都要显式 `maskClip`（`content-box, border-box`），否则两层默认同区、相减为空，效果会完全不可见。
+- 无限循环动画必须做两件事：`useInView` 门控（只在可见时跑）+ `prefers-reduced-motion` 降级（用 `lib/use-reduced-motion.ts`）。
 - 新增可见文案请同时检查深色/浅色两种主题下的对比度（≥ 4.5:1）。
 
 ## 手动走查清单

@@ -357,4 +357,34 @@ test.describe('Magic UI 装饰层（PRD 7.6：仅推荐位使用）', () => {
     await page.getByTestId('empty-clear-filters').click();
     await expect(page.getByTestId('site-grid')).toBeVisible();
   });
+
+  test('禁用 JS 时外壳仍可访问，且不会显示「0 个站点」这类假数字', async ({ browser }) => {
+    /*
+     * 站点数据是运行时 fetch 的，无 JS 时卡片区只有骨架，这是已知限制（README「已知限制」）。
+     * 但页头、页脚、分类链接、隐私政策必须仍然可读可点（PRD 4.4）。
+     * 另外 Magic UI 的 NumberTicker 原版首帧渲染 startValue=0，
+     * 会让无 JS 的页脚写成「当前收录 0 个站点」——这里守住这条底线。
+     */
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/');
+
+    await expect(page.getByRole('link', { name: /首页$/ })).toBeVisible();
+    await expect(page.getByTestId('footer-privacy-link')).toHaveAttribute('href', '/privacy/');
+    // 站点数只有客户端拿到数据才准确，无 JS 时退化成一句不含数字的说明
+    await expect(page.locator('footer')).toContainText('精选技术站点');
+    await expect(page.locator('footer')).not.toContainText('当前收录 0');
+    // 卡片数据是运行时 fetch 的，无 JS 时只有 Suspense 的静态骨架（aria-busy），
+    // 客户端才有的 grid-skeleton 不会出现在 HTML 里
+    await expect(page.locator('[aria-busy="true"]')).toBeVisible();
+    await context.close();
+  });
+
+  test('背景网格由 SVG pattern 绘制（不再是两层渐变平铺）', async ({ page }) => {
+    await gotoHome(page);
+    const backdrop = page.locator('.page-backdrop-grid');
+    await expect(backdrop.locator('svg pattern')).toHaveCount(1);
+    // 只保留均匀网格：不再有 squares 高亮方块，否则会被标题压出「脏点」
+    await expect(backdrop.locator('svg rect')).toHaveCount(1);
+  });
 });

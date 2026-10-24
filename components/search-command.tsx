@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import { ShineBorder } from '@/components/magicui/shine-border';
 import { Modal } from '@/components/ui/modal';
 import { SiteIcon } from '@/components/site-card';
 import { SearchIcon, SpinnerIcon } from '@/components/icons';
@@ -298,7 +299,12 @@ export function SearchCommand({ open, onClose, initialQuery = '' }: SearchComman
         </motion.ul>
 
         {empty ? (
-          <div className="px-3 py-8 text-center animate-fade-in" data-testid="search-empty">
+          <div
+            className="relative mx-1 overflow-hidden rounded-xl px-3 py-8 text-center animate-fade-in"
+            data-testid="search-empty"
+          >
+            {/* 与空结果页同一套装饰语言：绕边扫光，让「没搜到」不至于是一片死白 */}
+            <ShineBorder borderWidth={1} duration={9} shineColor={['#8B5CF6', '#3B82F6']} />
             <p className="text-[13px] text-ink">没有找到与「{query.trim()}」相关的站点</p>
             <p className="mt-1 text-meta text-muted">
               试试更短的关键词，或从下方推荐中挑选：

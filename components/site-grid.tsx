@@ -7,6 +7,8 @@ import { useAppStore } from '@/components/providers/app-store';
 import { useUi } from '@/components/providers/ui';
 import { SiteCard } from '@/components/site-card';
 import { Meteors } from '@/components/magicui/meteors';
+import { ShineBorder } from '@/components/magicui/shine-border';
+import { BlurFade } from '@/components/magicui/blur-fade';
 import { AlertIcon, SearchIcon, SpinnerIcon } from '@/components/icons';
 import type { Category, Site } from '@/lib/types';
 
@@ -118,31 +120,39 @@ export function SiteGrid({
 
   if (sites.length === 0) {
     return (
-      <div
-        data-testid="empty-state"
-        className="glass-card animate-fade-in relative flex flex-col items-center gap-3 overflow-hidden px-6 py-14 text-center"
-      >
-        {/* 空态是「什么都没有」的页面，用一层流星给一点生气（Magic UI Meteors） */}
-        <Meteors number={10} className="opacity-45" />
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/15 text-primary-ink">
-          <SearchIcon size={19} />
-        </span>
-        <div>
-          <p className="text-[14px] font-medium text-ink">没有符合条件的站点</p>
-          <p className="mt-1 text-meta text-muted">
-            当前分类下共 0 个结果（全部 {totalCount} 个站点）。可以回到全部站点，或用 ⌘K 直接搜索。
-          </p>
+      /* BlurFade：从模糊到清晰地浮现，比单纯淡入更有「页面反应过来了」的感觉 */
+      <BlurFade>
+        <div
+          data-testid="empty-state"
+          className="glass-card relative flex flex-col items-center gap-3 overflow-hidden px-6 py-14 text-center"
+        >
+          {/*
+           * 空态是「什么都没有」的页面，需要一点生气：
+           * 绕边扫光（Magic UI ShineBorder）+ 一层流星（Magic UI Meteors）。
+           * 两者都是 aria-hidden + pointer-events-none，不影响按钮点击与读屏。
+           */}
+          <ShineBorder borderWidth={1} duration={9} shineColor={['#8B5CF6', '#3B82F6']} />
+          <Meteors number={10} className="opacity-45" />
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/15 text-primary-ink">
+            <SearchIcon size={19} />
+          </span>
+          <div>
+            <p className="text-[14px] font-medium text-ink">没有符合条件的站点</p>
+            <p className="mt-1 text-meta text-muted">
+              当前分类下共 0 个结果（全部 {totalCount} 个站点）。可以回到全部站点，或用 ⌘K 直接搜索。
+            </p>
+          </div>
+          <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+            <button type="button" onClick={onClearFilters} data-testid="empty-clear-filters" className="btn-primary">
+              查看全部站点
+            </button>
+            {/* 空态给出的第二条出路：直接开搜索面板，不用先去点右上角的图标 */}
+            <button type="button" onClick={() => openSearch()} data-testid="empty-open-search" className="btn-ghost">
+              直接搜索站点
+            </button>
+          </div>
         </div>
-        <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
-          <button type="button" onClick={onClearFilters} data-testid="empty-clear-filters" className="btn-primary">
-            查看全部站点
-          </button>
-          {/* 空态给出的第二条出路：直接开搜索面板，不用先去点右上角的图标 */}
-          <button type="button" onClick={() => openSearch()} data-testid="empty-open-search" className="btn-ghost">
-            直接搜索站点
-          </button>
-        </div>
-      </div>
+      </BlurFade>
     );
   }
 
