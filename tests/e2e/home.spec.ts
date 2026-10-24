@@ -312,3 +312,49 @@ test.describe('主题与布局密度（PRD 3.3）', () => {
     await expectNoDialog(page);
   });
 });
+
+test.describe('Magic UI 装饰层（PRD 7.6：仅推荐位使用）', () => {
+  test('只有推荐位卡片带绕边流光，普通卡片没有', async ({ page }) => {
+    await gotoHome(page);
+
+    // 数据里 featured: true 的站点共 10 个
+    const featuredIds = await page.evaluate(async () => {
+      const res = await fetch('/data/sites.json');
+      const data = (await res.json()) as Array<{ id: string; featured?: boolean }>;
+      return data.filter((s) => s.featured).map((s) => s.id);
+    });
+    expect(featuredIds.length).toBe(10);
+
+    const beams = page.getByTestId('border-beam');
+    await expect(beams).toHaveCount(featuredIds.length);
+
+    // 每一个流光都落在对应推荐位卡片内部，且不拦截点击
+    for (const id of featuredIds) {
+      const beam = page.locator(`[data-site-id="${id}"]`).getByTestId('border-beam');
+      await expect(beam).toHaveCount(1);
+      await expect(beam).toHaveCSS('pointer-events', 'none');
+    }
+    await expect(
+      page.locator('[data-site-id="hoppscotch"]').getByTestId('border-beam'),
+    ).toHaveCount(0);
+  });
+
+  test('空结果页出现流星装饰，且不拦截按钮点击', async ({ page }) => {
+    // 只保留设计类站点，再点「开发工具」制造空态
+    await page.route('**/data/sites.json', async (route) => {
+      const res = await route.fetch();
+      const data = (await res.json()) as Array<{ category: string }>;
+      await route.fulfill({ json: data.filter((s) => s.category === 'design') });
+    });
+    await gotoHome(page);
+    await page.getByTestId('category-dev-tools').click();
+
+    await expect(page.getByTestId('empty-state')).toBeVisible();
+    await expect(page.getByTestId('meteors')).toBeVisible();
+    await expect(page.getByTestId('meteors')).toHaveCSS('pointer-events', 'none');
+
+    // 装饰层不能挡住空态里的两个出口按钮
+    await page.getByTestId('empty-clear-filters').click();
+    await expect(page.getByTestId('site-grid')).toBeVisible();
+  });
+});

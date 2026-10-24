@@ -41,6 +41,7 @@ pnpm test              # 数据校验 + 类型 + E2E（含 axe 无障碍）
   - 图标按钮必须有 `aria-label`；
   - 补充对应 Playwright 用例（含 `data-testid`）。
 - 动效只动画 `transform` / `opacity`，并在 `prefers-reduced-motion: reduce` 下降级为 0ms。
+- 装饰性组件（`components/magicui/`）只允许用在推荐位或空态，必须 `pointer-events-none` 且 `aria-hidden`；新增时同步改写为 Tailwind 3 语法（注册表默认是 v4 的 `bg-linear-to-*` / `mask-intersect` 等）。
 - 新增可见文案请同时检查深色/浅色两种主题下的对比度（≥ 4.5:1）。
 
 ## 手动走查清单

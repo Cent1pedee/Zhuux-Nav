@@ -116,6 +116,12 @@ const config: Config = {
           '0%': { opacity: '0.55', transform: 'scale(0.6)' },
           '100%': { opacity: '0', transform: 'scale(1.9)' },
         },
+        /* Magic UI Meteors：从右上斜向落到左下，位移 + 淡出 */
+        meteor: {
+          '0%': { transform: 'rotate(215deg) translateX(0)', opacity: '1' },
+          '70%': { opacity: '1' },
+          '100%': { transform: 'rotate(215deg) translateX(-500px)', opacity: '0' },
+        },
         /* 导航高亮下划线滑入 */
         'underline-in': {
           from: { transform: 'scaleX(0)' },
@@ -139,6 +145,7 @@ const config: Config = {
         reveal: 'reveal 180ms cubic-bezier(0.22, 1, 0.36, 1) both',
         halo: 'halo 520ms ease-out forwards',
         shimmer: 'shimmer 1.4s ease-in-out infinite',
+        meteor: 'meteor 5s linear infinite',
       },
     },
   },

@@ -10,6 +10,7 @@ import { useToast } from '@/components/providers/toast';
 import { copyText } from '@/lib/clipboard';
 import { track } from '@/lib/analytics';
 import { MoreIcon, StarIcon } from '@/components/icons';
+import { BorderBeam } from '@/components/magicui/border-beam';
 import type { Category, Site } from '@/lib/types';
 
 /** favicon：固定尺寸 + 懒加载 + 失败兜底为字母块（PRD 4.1 / 4.4） */
@@ -274,6 +275,20 @@ export function SiteCard({ site, category, index, stagger, compact = false, onFe
               'radial-gradient(160px 160px at var(--mx, 50%) var(--my, 50%), rgb(var(--c-primary) / 0.13), transparent 70%)',
           }}
         />
+        {/*
+         * 推荐位（featured）才有绕边流光（Magic UI BorderBeam，PRD 7.6「仅推荐位使用」）。
+         * 放在所有内容之下、光晕之上：既不会盖住文字，也不会抢走卡片的点击。
+         */}
+        {site.featured ? (
+          <BorderBeam
+            className="z-[1] opacity-70 transition-opacity duration-300 ease-silk group-hover:opacity-100"
+            size={compact ? 44 : 60}
+            duration={7}
+            colorFrom="#8B5CF6"
+            colorTo="#3B82F6"
+          />
+        ) : null}
+
         {/* 掠过卡片的柔光高光：仅 transform 动画 */}
         <span
           aria-hidden="true"

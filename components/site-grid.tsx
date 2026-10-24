@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { useAppStore } from '@/components/providers/app-store';
 import { useUi } from '@/components/providers/ui';
 import { SiteCard } from '@/components/site-card';
+import { Meteors } from '@/components/magicui/meteors';
 import { AlertIcon, SearchIcon, SpinnerIcon } from '@/components/icons';
 import type { Category, Site } from '@/lib/types';
 
@@ -119,8 +120,10 @@ export function SiteGrid({
     return (
       <div
         data-testid="empty-state"
-        className="glass-card animate-fade-in flex flex-col items-center gap-3 px-6 py-14 text-center"
+        className="glass-card animate-fade-in relative flex flex-col items-center gap-3 overflow-hidden px-6 py-14 text-center"
       >
+        {/* 空态是「什么都没有」的页面，用一层流星给一点生气（Magic UI Meteors） */}
+        <Meteors number={10} className="opacity-45" />
         <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/15 text-primary-ink">
           <SearchIcon size={19} />
         </span>
