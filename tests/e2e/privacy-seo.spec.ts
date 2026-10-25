@@ -125,7 +125,7 @@ test.describe('隐私与本地数据（PRD 4.7）', () => {
 test.describe('SEO 与路由（PRD 4.2）', () => {
   test('首页含完整 meta、OG、Twitter Card 与 JSON-LD', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page).toHaveTitle(/宇宙无敌导航/);
+    await expect(page).toHaveTitle(/Zhuux导航页/);
     const head = await page.evaluate(() => ({
       description: document.querySelector('meta[name="description"]')?.getAttribute('content'),
       ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute('content'),
@@ -167,6 +167,22 @@ test.describe('SEO 与路由（PRD 4.2）', () => {
     const robots = await request.get('/robots.txt');
     expect(robots.status()).toBe(200);
     expect(await robots.text()).toContain('Sitemap:');
+  });
+
+  test('manifest 的站名与首页标题同源，不会出现品牌漂移', async ({ request, page }) => {
+    // manifest 由 app/manifest.ts 从 siteConfig 生成，曾经是 public/ 下的静态文件，
+    // 结果站名改了、manifest 里还是旧名字。这条用例守住「只有一个数据源」。
+    const response = await request.get('/manifest.webmanifest');
+    expect(response.status()).toBe(200);
+    const manifest = (await response.json()) as { name: string; short_name: string };
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const title = await page.title();
+    const brand = title.split(' · ')[0];
+
+    expect(brand).toBeTruthy();
+    expect(manifest.name.startsWith(brand)).toBe(true);
+    expect(manifest.short_name).toBeTruthy();
   });
 
   test('未知路径返回 404 页面并可返回首页', async ({ page }) => {

@@ -55,7 +55,7 @@ test.describe('无障碍（PRD 4.3）', () => {
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: '跳到主要内容' })).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('link', { name: /宇宙无敌导航/ }).first()).toBeFocused();
+    await expect(page.getByRole('link', { name: /Zhuux导航页/ }).first()).toBeFocused();
 
     // 通过键盘打开设置弹层
     await page.getByTestId('settings-trigger').focus();

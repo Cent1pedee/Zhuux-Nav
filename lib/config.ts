@@ -3,15 +3,15 @@
  * 部署到自己的域名时，只需改这里 + 环境变量 NEXT_PUBLIC_SITE_URL。
  */
 export const siteConfig = {
-  name: '宇宙无敌导航',
-  shortName: '宇宙导航',
+  name: 'Zhuux导航页',
+  shortName: 'Zhuux导航',
   tagline: '3 秒找到你要的技术站点',
   description:
     '面向技术从业者的高效导航页：精选开发工具、设计资源、云服务、社区与 AI 工具，支持分类过滤、全局搜索、收藏与深浅色主题。',
   /** 部署域名，用于 canonical / OG / sitemap；构建时可用 NEXT_PUBLIC_SITE_URL 覆盖 */
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://nav.example.com',
   locale: 'zh-CN',
-  author: '宇宙无敌导航团队',
+  author: '煮雪话河山',
   keywords: [
     '导航页',
     '开发者导航',

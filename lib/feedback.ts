@@ -1,4 +1,5 @@
 import { STORAGE_KEYS, readJSON, storage, isStringArray } from './storage';
+import { siteConfig } from './config';
 import type { Site } from './types';
 
 /**
@@ -62,7 +63,7 @@ export async function submitFeedback(payload: FeedbackPayload): Promise<{ ok: bo
 export function buildFavoritesExport(sites: Site[]): Blob {
   const payload = {
     exportedAt: new Date().toISOString(),
-    source: '宇宙无敌导航',
+    source: siteConfig.name,
     count: sites.length,
     sites: sites.map((s) => ({
       id: s.id,

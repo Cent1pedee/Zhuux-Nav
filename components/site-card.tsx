@@ -245,16 +245,33 @@ export function SiteCard({ site, category, index, stagger, compact = false, onFe
         />
         {/*
          * 推荐位（featured）才有绕边流光（Magic UI BorderBeam，PRD 7.6「仅推荐位使用」）。
-         * 放在所有内容之下、光晕之上：既不会盖住文字，也不会抢走卡片的点击。
+         * 效果对齐官方示例「2 Border Beams」（registry/example/border-beam-demo-2.tsx）：
+         * 两条同向光束、周期相同，第二条用 `delay` 错开半个周期，
+         * 于是一条走到下半圈时另一条正在上半圈，边框上始终有光在跑。
+         * `fade` 让两端透明，呈彗星拖尾而不是硬边色块。
+         * 两条都被遮罩裁成贴着边框的一圈，且 pointer-events-none：不挡字、不抢点击。
          */}
         {site.featured ? (
-          <BorderBeam
-            className="z-[1] opacity-70 transition-opacity duration-300 ease-silk group-hover:opacity-100"
-            size={compact ? 44 : 60}
-            duration={7}
-            colorFrom="#8B5CF6"
-            colorTo="#3B82F6"
-          />
+          <>
+            <BorderBeam
+              className="z-[1] opacity-80 transition-opacity duration-300 ease-silk group-hover:opacity-100"
+              size={compact ? 110 : 150}
+              duration={8}
+              fade
+              colorFrom="#8B5CF6"
+              colorTo="#A78BFA"
+            />
+            <BorderBeam
+              className="z-[1] opacity-80 transition-opacity duration-300 ease-silk group-hover:opacity-100"
+              size={compact ? 110 : 150}
+              duration={8}
+              delay={4}
+              borderWidth={2}
+              fade
+              colorFrom="#3B82F6"
+              colorTo="#60A5FA"
+            />
+          </>
         ) : null}
 
         {/* 掠过卡片的柔光高光：仅 transform 动画 */}

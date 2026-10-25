@@ -344,29 +344,53 @@ test.describe('主题与布局密度（PRD 3.3）', () => {
 });
 
 test.describe('Magic UI 装饰层（PRD 7.6：仅推荐位使用）', () => {
-  test('只有推荐位卡片带绕边流光，普通卡片没有', async ({ page }) => {
+  test('只有推荐位卡片带绕边流光，且每条是错开半周期的两条光束', async ({ page }) => {
     await gotoHome(page);
 
-    // 数据里 featured: true 的站点共 10 个
     const featuredIds = await page.evaluate(async () => {
       const res = await fetch('/data/sites.json');
       const data = (await res.json()) as Array<{ id: string; featured?: boolean }>;
       return data.filter((s) => s.featured).map((s) => s.id);
     });
-    expect(featuredIds.length).toBe(10);
+    // 推荐位数量不写死：站点数据随时会加，写死 10 会在下次改数据时误报
+    expect(featuredIds.length).toBeGreaterThan(0);
 
-    const beams = page.getByTestId('border-beam');
-    await expect(beams).toHaveCount(featuredIds.length);
+    // 每条推荐位卡片两条光束（对齐官方「2 Border Beams」示例），总数是推荐位数 × 2
+    await expect(page.getByTestId('border-beam')).toHaveCount(featuredIds.length * 2);
 
-    // 每一个流光都落在对应推荐位卡片内部，且不拦截点击
     for (const id of featuredIds) {
-      const beam = page.locator(`[data-site-id="${id}"]`).getByTestId('border-beam');
-      await expect(beam).toHaveCount(1);
-      await expect(beam).toHaveCSS('pointer-events', 'none');
+      const beams = page.locator(`[data-site-id="${id}"]`).getByTestId('border-beam');
+      await expect(beams).toHaveCount(2);
+      // 两条都不能拦截点击
+      await expect(beams.first()).toHaveCSS('pointer-events', 'none');
+      await expect(beams.last()).toHaveCSS('pointer-events', 'none');
     }
+
+    // 普通卡片一条都没有
     await expect(
       page.locator('[data-site-id="hoppscotch"]').getByTestId('border-beam'),
     ).toHaveCount(0);
+  });
+
+  test('两条光束错开半个周期，不同时出现在同一位置', async ({ page }) => {
+    // 本文件默认跑在 reducedMotion: 'reduce' 下，那时只渲染静态描边、没有动画节点，
+    // 所以这条用例显式关掉降级，才能观察到 offsetDistance 的相位差。
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await gotoHome(page);
+
+    const phase = await page.evaluate(async () => {
+      const card = document.querySelector('[data-site-id="github"]')!;
+      // 等一帧让 Motion 把 initial 的 offsetDistance 写进样式
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      return [...card.querySelectorAll('[data-testid="border-beam"] span')].map(
+        (el) => getComputedStyle(el).offsetDistance,
+      );
+    });
+
+    expect(phase).toHaveLength(2);
+    // 官方示例用 `delay={3}`（周期 6s 的一半）错开；这里周期 8s、delay 4，
+    // 两条的 offsetDistance 应当不同，否则等价于只有一条光在跑
+    expect(phase[0]).not.toBe(phase[1]);
   });
 
   test('空结果页出现流星装饰，且不拦截按钮点击', async ({ page }) => {

@@ -6,8 +6,7 @@ import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: '隐私政策',
-  description:
-    '宇宙无敌导航的隐私政策：我们不收集个人身份信息，统计数据仅在获得同意后采集，收藏与偏好只保存在本地浏览器。',
+  description: `${siteConfig.name}的隐私政策：我们不收集个人身份信息，统计数据仅在获得同意后采集，收藏与偏好只保存在本地浏览器。`,
   alternates: { canonical: '/privacy/' },
   robots: { index: true, follow: true },
 };

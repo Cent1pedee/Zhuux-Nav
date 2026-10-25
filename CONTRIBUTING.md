@@ -26,7 +26,7 @@ pnpm test              # 数据校验 + 类型 + E2E（含 axe 无障碍）
 | `category` | string | 必须是 `categories.json` 中的一级分类 id |
 | `subcategory` | string | 必须属于该一级分类 |
 | `tags` | string[] | 至少 1 个，用于搜索与展示 |
-| `featured` | boolean? | 可选，推荐位标记 |
+| `featured` | boolean? | 可选，推荐位标记；为 `true` 时卡片边缘会有两条同向、错开半个周期的 Magic UI `BorderBeam` 光束 |
 
 - 分类字段：`id`、`name`、`description`、`subcategories[{ id, name }]`。
 - 修改后必须能通过 `pnpm validate:data`，否则 `pnpm build` 会失败（这是有意的 CI 门禁）。

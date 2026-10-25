@@ -10,6 +10,7 @@
   "description": "面向技术从业者的导航页 —— Next.js + TypeScript + Tailwind CSS 静态站点",
   "scripts": {
     "prepare:data": "node scripts/sync-data.mjs",
+    "og": "node scripts/make-og.mjs",
     "dev": "pnpm run prepare:data && next dev -p 4321",
     "build": "pnpm run validate:data && pnpm run prepare:data && next build",
     "preview": "node scripts/serve-out.mjs 4321",
