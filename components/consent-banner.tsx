@@ -6,6 +6,7 @@ import { isDoNotTrackEnabled } from '@/lib/analytics';
 import { PrivacyDialog } from '@/components/dialogs';
 import { cn } from '@/lib/cn';
 import { CloseIcon } from '@/components/icons';
+import { ShimmerButton } from '@/components/magicui/shimmer-button';
 
 /**
  * Cookie / 统计同意横幅（PRD 4.7）：
@@ -85,14 +86,14 @@ export function ConsentBanner() {
           >
             仅必要
           </button>
-          <button
+          <ShimmerButton
             type="button"
             onClick={() => setConsent('granted')}
             data-testid="consent-accept"
-            className="btn-primary px-3 py-1.5"
+            className="px-3 py-1.5"
           >
             允许统计
-          </button>
+          </ShimmerButton>
           <button
             type="button"
             onClick={() => setDismissed(true)}

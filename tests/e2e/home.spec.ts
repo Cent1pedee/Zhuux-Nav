@@ -387,4 +387,38 @@ test.describe('Magic UI 装饰层（PRD 7.6：仅推荐位使用）', () => {
     // 只保留均匀网格：不再有 squares 高亮方块，否则会被标题压出「脏点」
     await expect(backdrop.locator('svg rect')).toHaveCount(1);
   });
+
+  test('主按钮统一为 ShimmerButton（扫光层存在且不拦截点击）', async ({ page }) => {
+    await gotoHome(page);
+
+    // 空态与错误态的主按钮也是 ShimmerButton，但常规首页看不到；
+    // 这里用「设置面板 → 清除所有本地数据」这条一定会出现主按钮的路径来验证。
+    await page.getByTestId('settings-trigger').click();
+    await page.getByTestId('clear-all-data').click();
+    const accept = page.getByTestId('confirm-accept');
+    await expect(accept).toBeVisible();
+    await expect(accept).toHaveAttribute('data-shimmer', 'true');
+
+    // 扫光层是纯装饰，不能吃掉按钮自身的点击
+    await expect(accept.locator('[aria-hidden="true"]').first()).toHaveCSS(
+      'pointer-events',
+      'none',
+    );
+    await accept.click();
+    await expect(page.getByTestId('toast').first()).toContainText('已清除');
+  });
+
+  test('搜索结果被裁切时，底部用 ProgressiveBlur 逐层模糊提示「下面还有」', async ({ page }) => {
+    await gotoHome(page);
+    await page.getByTestId('search-trigger').click();
+    // 单字母能命中大量结果，保证列表一定被 max-h 裁切
+    await page.getByTestId('search-input').fill('a');
+    await expect(page.getByTestId('search-result').first()).toBeVisible();
+
+    const blur = page.getByTestId('progressive-blur');
+    await expect(blur).toHaveCount(1);
+    // 8 层逐级加重的 backdrop-filter
+    await expect(blur).toHaveAttribute('data-layers', '8');
+    await expect(blur).toHaveCSS('pointer-events', 'none');
+  });
 });

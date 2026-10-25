@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/cn';
 import { usePrefersReducedMotion } from '@/lib/use-reduced-motion';
 
 type Direction = 'up' | 'down' | 'left' | 'right';

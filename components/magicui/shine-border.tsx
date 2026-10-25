@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/cn';
 import { usePrefersReducedMotion } from '@/lib/use-reduced-motion';
 
 interface ShineBorderProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
 import { Modal, ModalHeader } from '@/components/ui/modal';
-import { cn } from '@/lib/cn';
+import { ShimmerButton } from '@/components/magicui/shimmer-button';
 import type { ConfirmOptions } from '@/lib/types';
 
 interface ConfirmContextValue {
@@ -61,17 +61,17 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
               >
                 {options.cancelText ?? '取消'}
               </button>
-              <button
+              <ShimmerButton
                 type="button"
                 data-testid="confirm-accept"
                 onClick={() => settle(true)}
-                className={cn(
-                  'btn-primary h-9 px-3.5',
-                  options.tone === 'danger' && 'bg-red-600 hover:brightness-110',
-                )}
+                /* 危险操作换成红色底，其余沿用主色；底色走 ShimmerButton 的 background 变量 */
+                background={options.tone === 'danger' ? '#dc2626' : undefined}
+                shimmerColor={options.tone === 'danger' ? '#fecaca' : undefined}
+                className="h-9 px-3.5"
               >
                 {options.confirmText ?? '确定'}
-              </button>
+              </ShimmerButton>
             </div>
           </>
         ) : null}

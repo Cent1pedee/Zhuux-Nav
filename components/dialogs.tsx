@@ -8,6 +8,7 @@ import { useUi } from '@/components/providers/ui';
 import { useToast } from '@/components/providers/toast';
 import { useConfirm } from '@/components/providers/confirm';
 import { SiteIcon } from '@/components/site-card';
+import { ShimmerButton } from '@/components/magicui/shimmer-button';
 import { cn, relativeTime } from '@/lib/cn';
 import { copyText, absoluteUrl } from '@/lib/clipboard';
 import { hostnameOf } from '@/lib/data';
@@ -72,7 +73,7 @@ export function ShareDialog() {
             </button>
           </div>
         ))}
-        <button
+        <ShimmerButton
           type="button"
           onClick={async () => {
             if (typeof navigator !== 'undefined' && navigator.share) {
@@ -94,11 +95,11 @@ export function ShareDialog() {
               });
             }
           }}
-          className="btn-primary w-full"
+          className="w-full px-4 py-2"
         >
           <ShareIcon size={14} />
           使用系统分享
-        </button>
+        </ShimmerButton>
       </div>
     </Modal>
   );
@@ -168,13 +169,9 @@ export function SubscribeDialog() {
           <p className="mt-1 text-meta leading-5 text-muted">
             演示环境不会真的发送邮件。接入 Buttondown 等第三方服务后，此表单会改为跳转其订阅页。
           </p>
-          <button
-            type="button"
-            onClick={close}
-            className="btn-primary mt-4"
-          >
+          <ShimmerButton type="button" onClick={close} className="mt-4 px-4 py-2">
             完成
-          </button>
+          </ShimmerButton>
         </div>
       ) : (
         <form onSubmit={submit} noValidate className="px-5 py-4">
@@ -219,14 +216,14 @@ export function SubscribeDialog() {
             >
               取消
             </button>
-            <button
+            <ShimmerButton
               type="submit"
               disabled={pending}
               data-testid="subscribe-submit"
-              className="btn-primary h-9 px-4"
+              className="h-9 px-4"
             >
               {pending ? '提交中…' : '订阅'}
-            </button>
+            </ShimmerButton>
           </div>
         </form>
       )}
@@ -432,14 +429,14 @@ export function FeedbackDialog() {
           >
             取消
           </button>
-          <button
+          <ShimmerButton
             type="submit"
             disabled={pending}
             data-testid="feedback-submit"
-            className="btn-primary h-9 px-4"
+            className="h-9 px-4"
           >
             {pending ? '提交中…' : '提交反馈'}
-          </button>
+          </ShimmerButton>
         </div>
       </form>
     </Modal>

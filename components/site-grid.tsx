@@ -8,6 +8,7 @@ import { useUi } from '@/components/providers/ui';
 import { SiteCard } from '@/components/site-card';
 import { Meteors } from '@/components/magicui/meteors';
 import { ShineBorder } from '@/components/magicui/shine-border';
+import { ShimmerButton } from '@/components/magicui/shimmer-button';
 import { BlurFade } from '@/components/magicui/blur-fade';
 import { AlertIcon, SearchIcon, SpinnerIcon } from '@/components/icons';
 import type { Category, Site } from '@/lib/types';
@@ -68,15 +69,10 @@ export function SiteGrid({
             请检查网络后重试，或稍后再访问。数据文件位于 <code className="font-mono">/data/sites.json</code>。
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onRetry}
-          data-testid="retry-button"
-          className="btn-primary mt-1"
-        >
+        <ShimmerButton type="button" onClick={onRetry} data-testid="retry-button" className="mt-1 px-4 py-2">
           <SpinnerIcon size={13} />
           重新加载
-        </button>
+        </ShimmerButton>
       </div>
     );
   }
@@ -143,9 +139,9 @@ export function SiteGrid({
             </p>
           </div>
           <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
-            <button type="button" onClick={onClearFilters} data-testid="empty-clear-filters" className="btn-primary">
+            <ShimmerButton type="button" onClick={onClearFilters} data-testid="empty-clear-filters" className="px-4 py-2">
               查看全部站点
-            </button>
+            </ShimmerButton>
             {/* 空态给出的第二条出路：直接开搜索面板，不用先去点右上角的图标 */}
             <button type="button" onClick={() => openSearch()} data-testid="empty-open-search" className="btn-ghost">
               直接搜索站点

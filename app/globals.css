@@ -176,46 +176,14 @@
   }
 
   /*
-   * 按钮基类（PRD 7.4 动效 / 4.3 可见反馈）。
+   * 次级按钮（PRD 4.3 可见反馈）。
    *
    * 统一原则：**悬停只改颜色、阴影与亮度，绝不位移**；位移只出现在 `:active` 按下瞬间。
    * 原因见 header.tsx 的说明——悬停位移会让指针在边缘反复「进入/离开」，表现为抽搐与形变。
+   *
+   * 主按钮不再有 CSS 类：它统一用 `components/magicui/shimmer-button.tsx` 的
+   * `ShimmerButton`（带扫光），需要渲染成 `<a>` 的入口则复用它的 `shimmerButtonClass()`。
    */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    border-radius: 0.6rem;
-    background-color: rgb(var(--c-primary-solid));
-    padding: 0.5rem 1rem;
-    font-size: 13px;
-    font-weight: 500;
-    color: #fff;
-    transition:
-      filter 200ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow:
-      0 1px 2px rgb(0 0 0 / 0.22),
-      inset 0 1px 0 rgb(255 255 255 / 0.14);
-  }
-  .btn-primary:hover:not(:disabled) {
-    filter: brightness(1.1) saturate(1.05);
-    box-shadow:
-      0 12px 26px -14px rgb(var(--c-primary) / 0.95),
-      inset 0 1px 0 rgb(255 255 255 / 0.2);
-  }
-  .btn-primary:active:not(:disabled) {
-    transform: scale(0.975);
-    box-shadow: 0 2px 6px -2px rgb(var(--c-primary) / 0.6);
-  }
-  .btn-primary:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  /* 次级按钮：描边 + 悬停染主色，同样不位移 */
   .btn-ghost {
     display: inline-flex;
     align-items: center;

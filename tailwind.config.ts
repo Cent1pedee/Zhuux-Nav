@@ -122,6 +122,19 @@ const config: Config = {
           '0%': { opacity: '0.55', transform: 'scale(0.6)' },
           '100%': { opacity: '0', transform: 'scale(1.9)' },
         },
+        /* Magic UI ShimmerButton：按钮内一层 conic-gradient 绕圈旋转 */
+        'spin-around': {
+          '0%': { transform: 'translateZ(0) rotate(0)' },
+          '15%, 35%': { transform: 'translateZ(0) rotate(90deg)' },
+          '65%, 85%': { transform: 'translateZ(0) rotate(270deg)' },
+          '100%': { transform: 'translateZ(0) rotate(360deg)' },
+        },
+        /* Magic UI AnimatedGradientText：渐变底色横向滚动 */
+        gradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
         /* Magic UI Meteors：从右上斜向落到左下，位移 + 淡出 */
         meteor: {
           '0%': { transform: 'rotate(215deg) translateX(0)', opacity: '1' },
@@ -154,6 +167,8 @@ const config: Config = {
         halo: 'halo 520ms ease-out forwards',
         shimmer: 'shimmer 1.4s ease-in-out infinite',
         meteor: 'meteor 5s linear infinite',
+        'spin-around': 'spin-around calc(var(--speed, 3s) * 2) linear infinite',
+        gradient: 'gradient var(--gradient-speed, 4s) linear infinite',
       },
     },
   },

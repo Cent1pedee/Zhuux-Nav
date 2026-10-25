@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { ShineBorder } from '@/components/magicui/shine-border';
+import { ProgressiveBlur } from '@/components/magicui/progressive-blur';
 import { Modal } from '@/components/ui/modal';
 import { SiteIcon } from '@/components/site-card';
 import { SearchIcon, SpinnerIcon } from '@/components/icons';
@@ -327,14 +328,18 @@ export function SearchCommand({ open, onClose, initialQuery = '' }: SearchComman
           </div>
         ) : null}
 
-        {/* 结果被裁切时贴底的渐隐提示：告知「下面还有」，滚动到底部后自动消失 */}
+        {/* 结果被裁切时贴底的提示：告知「下面还有」，滚动到底部后自动消失。
+            用 Magic UI 的 ProgressiveBlur 取代原来的纯色渐变——列表被裁切时
+            逐层加重的模糊更像光学虚化，不会在深色面板上糊出一块突兀的色块。 */}
         <div
           aria-hidden="true"
           className={cn(
-            'pointer-events-none sticky bottom-0 -mt-9 h-9 bg-gradient-to-t from-[rgb(var(--c-surface))] via-[rgb(var(--c-surface))]/70 to-transparent transition-opacity duration-200 ease-silk',
+            'pointer-events-none sticky bottom-0 -mt-9 h-9 transition-opacity duration-200 ease-silk',
             moreBelow ? 'opacity-100' : 'opacity-0',
           )}
-        />
+        >
+          <ProgressiveBlur height="100%" position="bottom" className="z-0" />
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-3 border-t border-line/80 px-4 py-2.5 text-[13px] text-muted">
