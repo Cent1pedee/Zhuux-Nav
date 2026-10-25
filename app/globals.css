@@ -149,6 +149,28 @@
   }
 }
 
+/*
+ * Magic UI SmoothCursor 的配套规则。
+ *
+ * 为什么不直接在 JS 里 `document.body.style.cursor = 'none'`（注册表原版的做法）：
+ * 那样会让输入框、文本域里也失去竖线光标，用户不知道光标停在哪、也无法用鼠标定位文本。
+ * 这里只隐藏「指针型」元素，表单控件保留系统光标。
+ */
+html.smooth-cursor-on,
+html.smooth-cursor-on body,
+html.smooth-cursor-on a,
+html.smooth-cursor-on button,
+html.smooth-cursor-on [role='button'] {
+  cursor: none;
+}
+
+html.smooth-cursor-on input,
+html.smooth-cursor-on textarea,
+html.smooth-cursor-on select,
+html.smooth-cursor-on [contenteditable='true'] {
+  cursor: auto;
+}
+
 @layer components {
   /*
    * 卡片表面。

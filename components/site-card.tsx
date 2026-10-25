@@ -11,6 +11,7 @@ import { copyText } from '@/lib/clipboard';
 import { track } from '@/lib/analytics';
 import { MoreIcon, StarIcon } from '@/components/icons';
 import { BorderBeam } from '@/components/magicui/border-beam';
+import { MagicCard } from '@/components/magicui/magic-card';
 import type { Category, Site } from '@/lib/types';
 
 /** favicon：固定尺寸 + 懒加载 + 失败兜底为字母块（PRD 4.1 / 4.4） */
@@ -127,18 +128,6 @@ export function SiteCard({ site, category, index, stagger, compact = false, onFe
     return () => observer.disconnect();
   }, []);
 
-  /**
-   * 光晕跟随指针：直接写 CSS 变量而不是 setState，
-   * 避免每次 mousemove 都触发一次 React 重渲染（76 张卡片时会明显掉帧）。
-   */
-  const handlePointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    const node = cardRef.current;
-    if (!node) return;
-    const rect = node.getBoundingClientRect();
-    node.style.setProperty('--mx', `${event.clientX - rect.left}px`);
-    node.style.setProperty('--my', `${event.clientY - rect.top}px`);
-  }, []);
-
   const showTip = useCallback(() => {
     if (!clamped) return;
     const node = cardRef.current;
@@ -228,39 +217,30 @@ export function SiteCard({ site, category, index, stagger, compact = false, onFe
       data-testid="site-card"
       data-site-id={site.id}
     >
-      <div
+      <MagicCard
         ref={cardRef}
         onMouseEnter={showTip}
         onMouseLeave={hideTip}
         onFocus={showTip}
         onBlur={hideTip}
-        onPointerMove={handlePointerMove}
         className={cn(
           // contain:paint 把卡片的绘制隔离在自己这一层：hover 时的光晕/高光/位移
           // 不会触发网格甚至整页重绘，长列表滚动更稳
-          'relative h-full rounded-card border border-line/90 glass-card shadow-card [contain:paint]',
-          'transition-[transform,box-shadow,border-color] duration-300 ease-silk',
-          'group-hover:-translate-y-1 group-hover:border-primary/45 group-hover:shadow-card-hover',
+          'h-full rounded-card glass-card shadow-card [contain:paint]',
+          'transition-[transform,box-shadow] duration-300 ease-silk',
+          'group-hover:-translate-y-1 group-hover:shadow-card-hover',
           // 按下时轻微回压，给「点到了」一个即时的物理反馈
           'group-active:translate-y-0 group-active:scale-[0.994]',
-          'group-focus-within:border-primary/50 group-focus-within:shadow-card-hover',
+          'group-focus-within:shadow-card-hover',
         )}
       >
-        {/* 主色光晕（PRD 7.4 Glow，15% 透明度）+ 跟随指针的柔光（--mx/--my 由 onPointerMove 写入） */}
+        {/* 主色光晕（PRD 7.4 Glow，15% 透明度）；指针跟随的柔光与描边由 MagicCard 负责 */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-300 ease-silk group-hover:opacity-100 group-focus-within:opacity-100"
           style={{
             background:
               'radial-gradient(120% 90% at 50% 0%, rgb(var(--c-primary) / 0.15), transparent 62%)',
-          }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-card opacity-0 transition-opacity duration-200 ease-silk group-hover:opacity-100"
-          style={{
-            background:
-              'radial-gradient(160px 160px at var(--mx, 50%) var(--my, 50%), rgb(var(--c-primary) / 0.13), transparent 70%)',
           }}
         />
         {/*
@@ -444,7 +424,7 @@ export function SiteCard({ site, category, index, stagger, compact = false, onFe
             ) : null}
           </AnimatePresence>
         </div>
-      </div>
+      </MagicCard>
 
       {/*
        * 完整描述浮层：渲染到 body 上（position: fixed），

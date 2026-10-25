@@ -13,6 +13,7 @@ import {
 import { loadSiteData, type SiteData } from '@/lib/data';
 import {
   isConsent,
+  isCursorStyle,
   isDensity,
   isRecentArray,
   isStringArray,
@@ -23,7 +24,7 @@ import {
 } from '@/lib/storage';
 import { applyTheme, resolveTheme, systemPrefersDark } from '@/lib/theme';
 import { setAnalyticsConsent, track } from '@/lib/analytics';
-import type { Consent, Density, RecentEntry, ResolvedTheme, ThemeMode } from '@/lib/types';
+import type { Consent, CursorStyle, Density, RecentEntry, ResolvedTheme, ThemeMode } from '@/lib/types';
 import { useToast } from './toast';
 
 const MAX_RECENT = 10;
@@ -54,6 +55,9 @@ interface AppStore {
   density: Density;
   setDensity: (density: Density) => void;
 
+  cursorStyle: CursorStyle;
+  setCursorStyle: (style: CursorStyle) => void;
+
   consent: Consent;
   setConsent: (consent: 'granted' | 'denied') => void;
 
@@ -79,6 +83,7 @@ export function AppStoreProvider({
   const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('dark');
   const [density, setDensityState] = useState<Density>('comfortable');
+  const [cursorStyle, setCursorStyleState] = useState<CursorStyle>('smooth');
   const [consent, setConsentState] = useState<Consent>(null);
   const [hydrated, setHydrated] = useState(false);
   const requestId = useRef(0);
@@ -135,6 +140,7 @@ export function AppStoreProvider({
     applyTheme(storedTheme, undefined, { animate: false });
 
     setDensityState(readJSON<Density>(STORAGE_KEYS.density, isDensity, 'comfortable'));
+    setCursorStyleState(readJSON<CursorStyle>(STORAGE_KEYS.cursor, isCursorStyle, 'smooth'));
     setFavorites(readJSON<string[]>(STORAGE_KEYS.favorites, isStringArray, []));
     setRecent(readJSON<RecentEntry[]>(STORAGE_KEYS.recent, isRecentArray, []));
 
@@ -181,6 +187,9 @@ export function AppStoreProvider({
         }
         case STORAGE_KEYS.density:
           setDensityState(readJSON<Density>(STORAGE_KEYS.density, isDensity, 'comfortable'));
+          break;
+        case STORAGE_KEYS.cursor:
+          setCursorStyleState(readJSON<CursorStyle>(STORAGE_KEYS.cursor, isCursorStyle, 'smooth'));
           break;
         default:
           break;
@@ -243,6 +252,11 @@ export function AppStoreProvider({
     storage.set(STORAGE_KEYS.density, JSON.stringify(next));
   }, []);
 
+  const setCursorStyle = useCallback((next: CursorStyle) => {
+    setCursorStyleState(next);
+    storage.set(STORAGE_KEYS.cursor, JSON.stringify(next));
+  }, []);
+
   const setConsent = useCallback(
     (next: 'granted' | 'denied') => {
       setConsentState(next);
@@ -266,6 +280,7 @@ export function AppStoreProvider({
     setRecent([]);
     setThemeModeState('auto');
     setDensityState('comfortable');
+    setCursorStyleState('smooth');
     setConsentState(null);
     setAnalyticsConsent(null);
     applyTheme('auto', undefined, { animate: false });
@@ -293,6 +308,8 @@ export function AppStoreProvider({
       setThemeMode,
       density,
       setDensity,
+      cursorStyle,
+      setCursorStyle,
       consent,
       setConsent,
       clearAllLocalData,
@@ -317,6 +334,8 @@ export function AppStoreProvider({
       setThemeMode,
       density,
       setDensity,
+      cursorStyle,
+      setCursorStyle,
       consent,
       setConsent,
       clearAllLocalData,

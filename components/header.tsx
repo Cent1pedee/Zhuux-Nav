@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'motion/react';
+import { ScrollProgress } from '@/components/magicui/scroll-progress';
 import { cn } from '@/lib/cn';
 import { siteConfig } from '@/lib/config';
 import { useAppStore } from '@/components/providers/app-store';
@@ -318,12 +319,10 @@ export function Header() {
         </div>
       </div>
 
-      {/* 阅读进度：贴顶栏下沿的一条主色细线，只动 transform，不触发布局 */}
-      <motion.span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left rounded-r-full bg-gradient-to-r from-primary-solid via-secondary to-primary-solid shadow-[0_0_10px_rgb(var(--c-primary)/0.55)]"
-        style={{ scaleX: progress }}
-      />
+      {/* 阅读进度：贴顶栏下沿的一条主色细线，只动 transform，不触发布局。
+          用 Magic UI 的 ScrollProgress，进度值仍由本组件算好传入
+          （不能用组件内部的 useScroll：骨架阶段会把进度算成满格）。 */}
+      <ScrollProgress progress={progress} />
     </header>
   );
 }

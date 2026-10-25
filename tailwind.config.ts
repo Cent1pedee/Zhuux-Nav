@@ -141,6 +141,11 @@ const config: Config = {
           '70%': { opacity: '1' },
           '100%': { transform: 'rotate(215deg) translateX(-500px)', opacity: '0' },
         },
+        /* Magic UI ShinyButton：亮带从左扫到右，循环留白 */
+        'shiny-sweep': {
+          '0%': { backgroundPosition: '200% 0' },
+          '60%, 100%': { backgroundPosition: '-80% 0' },
+        },
         /* 导航高亮下划线滑入 */
         'underline-in': {
           from: { transform: 'scaleX(0)' },
@@ -169,6 +174,7 @@ const config: Config = {
         meteor: 'meteor 5s linear infinite',
         'spin-around': 'spin-around calc(var(--speed, 3s) * 2) linear infinite',
         gradient: 'gradient var(--gradient-speed, 4s) linear infinite',
+        'shiny-sweep': 'shiny-sweep 3.6s ease-in-out infinite',
       },
     },
   },

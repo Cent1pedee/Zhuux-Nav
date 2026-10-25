@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'motion/react';
 import { SiteGrid } from '@/components/site-grid';
+import { ShinyButton } from '@/components/magicui/shiny-button';
 import { CategoryNav, CurrentScope } from '@/components/category-nav';
 import { FavoritesStrip, RecentStrip } from '@/components/dialogs';
 import { useAppStore } from '@/components/providers/app-store';
@@ -13,7 +14,7 @@ import { filterSites } from '@/lib/data';
 import { NumberTicker } from '@/components/magicui/number-ticker';
 import { cn } from '@/lib/cn';
 import { subscribeLocationChange } from '@/lib/history';
-import { StarIcon, ClockIcon, GridIcon, RowsIcon, ArrowUpRightIcon, SearchIcon } from '@/components/icons';
+import { StarIcon, ClockIcon, GridIcon, RowsIcon, SearchIcon } from '@/components/icons';
 
 interface HomeViewProps {
   /** 由分类页固定传入，锁定该分类（PRD 4.2 静态分类路由） */
@@ -369,13 +370,13 @@ export function HomeView({ lockedCategory, heading, intro }: HomeViewProps) {
               已收藏 {favorites.length} 个站点 · 浏览记录自动保留最近 10 条
             </span>
             <span className="flex items-center gap-3">
-              <button
-                type="button"
+              <ShinyButton
+                data-testid="recommend-site"
                 onClick={() => openFeedback()}
-                className="group flex items-center gap-1 transition-colors duration-200 hover:text-primary-ink"
+                className="px-3 py-1 text-[13px]"
               >
-                推荐新站点 <ArrowUpRightIcon size={11} />
-              </button>
+                推荐新站点
+              </ShinyButton>
               <button
                 type="button"
                 onClick={openSettings}

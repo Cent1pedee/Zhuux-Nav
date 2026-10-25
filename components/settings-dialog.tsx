@@ -20,7 +20,7 @@ import {
   TrashIcon,
   CloseIcon,
 } from '@/components/icons';
-import type { Density, ThemeMode } from '@/lib/types';
+import type { CursorStyle, Density, ThemeMode } from '@/lib/types';
 
 const THEME_OPTIONS: { value: ThemeMode; label: string; icon: typeof SunIcon }[] = [
   { value: 'light', label: '浅色', icon: SunIcon },
@@ -33,6 +33,11 @@ const DENSITY_OPTIONS: { value: Density; label: string; hint: string; icon: type
   { value: 'compact', label: '紧凑', hint: '每行 6 列', icon: RowsIcon },
 ];
 
+const CURSOR_OPTIONS: { value: CursorStyle; label: string; hint: string }[] = [
+  { value: 'smooth', label: '缓动指针', hint: '带跟随惯性' },
+  { value: 'default', label: '系统指针', hint: '保持原生' },
+];
+
 /** 设置面板（PRD 3.3 主题 / 布局密度 / 浏览历史 / 本地数据管理） */
 export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const {
@@ -40,6 +45,8 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     setThemeMode,
     density,
     setDensity,
+    cursorStyle,
+    setCursorStyle,
     favorites,
     recent,
     sites,
@@ -254,6 +261,52 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     <span className="text-[13px]">{option.hint}</span>
                   </span>
                   {on ? <CheckIcon size={12} className="ml-auto" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="border-b border-line/70 px-5 py-4" aria-labelledby="settings-cursor">
+          <h3 id="settings-cursor" className="text-[13px] font-semibold text-ink">
+            指针样式
+          </h3>
+          <p className="mt-0.5 text-meta text-muted">
+            缓动指针会跟随鼠标带一点惯性；触屏设备与「减少动态效果」下自动停用。
+          </p>
+          <div
+            role="radiogroup"
+            aria-labelledby="settings-cursor"
+            className="mt-3 grid grid-cols-2 gap-2"
+          >
+            {CURSOR_OPTIONS.map((option) => {
+              const on = cursorStyle === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  data-testid={`cursor-option-${option.value}`}
+                  onClick={() => {
+                    setCursorStyle(option.value);
+                    toast({
+                      title: `已切换为${option.label}`,
+                      description: option.hint,
+                    });
+                  }}
+                  className={cn(
+                    'flex flex-col items-start gap-0.5 rounded-xl border px-3 py-2.5 text-left transition-[color,background-color,border-color,transform,box-shadow] duration-200 ease-silk active:scale-[0.97]',
+                    on
+                      ? 'border-primary/60 bg-primary/10 text-primary-ink shadow-[0_8px_20px_-18px_rgb(var(--c-primary)/0.9)]'
+                      : 'border-line text-muted hover:border-primary/35 hover:bg-ink/5 hover:text-ink',
+                  )}
+                >
+                  <span className="flex w-full items-center gap-1.5 text-[13px] font-medium">
+                    {option.label}
+                    {on ? <CheckIcon size={12} className="ml-auto" /> : null}
+                  </span>
+                  <span className="text-[13px]">{option.hint}</span>
                 </button>
               );
             })}

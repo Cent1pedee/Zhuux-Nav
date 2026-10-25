@@ -1,4 +1,4 @@
-import type { Consent, Density, RecentEntry, ThemeMode } from './types';
+import type { Consent, CursorStyle, Density, RecentEntry, ThemeMode } from './types';
 
 /**
  * localStorage 安全封装：隐私模式 / 禁用 Cookie / 配额超限时静默降级为内存存储，
@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
   recent: 'nav.recent',
   consent: 'nav.consent',
   feedback: 'nav.feedback',
+  cursor: 'nav.cursor',
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
@@ -94,6 +95,8 @@ export const isThemeMode = (v: unknown): v is ThemeMode =>
   v === 'light' || v === 'dark' || v === 'auto';
 
 export const isDensity = (v: unknown): v is Density => v === 'comfortable' || v === 'compact';
+
+export const isCursorStyle = (v: unknown): v is CursorStyle => v === 'default' || v === 'smooth';
 
 export const isConsent = (v: unknown): v is Exclude<Consent, null> =>
   v === 'granted' || v === 'denied';

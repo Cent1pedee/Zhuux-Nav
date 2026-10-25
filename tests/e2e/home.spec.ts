@@ -459,3 +459,109 @@ test.describe('Magic UI 装饰层（PRD 7.6：仅推荐位使用）', () => {
     await expect(blur).toHaveCSS('pointer-events', 'none');
   });
 });
+
+test.describe('Magic UI 交互型组件（指针 / 卡片描边 / 扫光 / 圆点铺满 / 进度条）', () => {
+  // 全局配置为了稳定点击设了 reducedMotion: 'reduce'，而缓动指针在「减少动态效果」下会自动停用，
+  // 这里单独恢复成 no-preference，才能验证它的默认启用状态。
+  test.use({ reducedMotion: 'no-preference' });
+
+  test('缓动指针默认开启，可在设置里切回系统指针并持久化', async ({ page }) => {
+    await gotoHome(page);
+
+    // 桌面端默认启用：html 上有开关类，且只有一个跟随节点
+    await expect(page.locator('html')).toHaveClass(/smooth-cursor-on/);
+    await expect(page.getByTestId('smooth-cursor')).toHaveCount(1);
+    await expect(page.getByTestId('smooth-cursor')).toHaveCSS('pointer-events', 'none');
+
+    await page.getByTestId('settings-trigger').click();
+    const smooth = page.getByTestId('cursor-option-smooth');
+    const native = page.getByTestId('cursor-option-default');
+    await expect(smooth).toHaveAttribute('aria-checked', 'true');
+    await expect(native).toHaveAttribute('aria-checked', 'false');
+
+    await native.click();
+    expect(await readStore(page, 'nav.cursor')).toBe('default');
+    await expect(page.getByTestId('toast').first()).toContainText('已切换为系统指针');
+
+    await page.keyboard.press('Escape');
+    await expectNoDialog(page);
+    await expect(page.locator('html')).not.toHaveClass(/smooth-cursor-on/);
+    await expect(page.getByTestId('smooth-cursor')).toHaveCount(0);
+
+    // 刷新后仍然是系统指针
+    await page.reload();
+    await expect(page.getByTestId('site-grid')).toBeVisible();
+    await expect(page.locator('html')).not.toHaveClass(/smooth-cursor-on/);
+  });
+
+  test('空态里流星装饰存在，且不拦截出口按钮', async ({ page }) => {
+    await page.route('**/data/sites.json', async (route) => {
+      const res = await route.fetch();
+      const data = (await res.json()) as Array<{ category: string }>;
+      await route.fulfill({ json: data.filter((s) => s.category === 'design') });
+    });
+    await gotoHome(page);
+    await page.getByTestId('category-dev-tools').click();
+
+    await expect(page.getByTestId('empty-state')).toBeVisible();
+    await expect(page.getByTestId('meteors')).toHaveCount(1);
+    await expect(page.getByTestId('meteors')).toHaveCSS('pointer-events', 'none');
+
+    // 装饰层之上仍然点得到出口按钮
+    await page.getByTestId('empty-open-search').click();
+    await expect(page.getByTestId('search-input')).toBeVisible();
+  });
+
+  test('圆点铺满按钮文字不重复朗读（两份文字都 aria-hidden，靠 aria-label 命名）', async ({ page }) => {
+    await gotoHome(page);
+
+    const subscribe = page.getByTestId('footer-subscribe');
+    await expect(subscribe).toHaveAttribute('data-interactive-hover', 'true');
+    // 可访问名只有一个，且与可见文字一致
+    await expect(subscribe).toHaveAccessibleName('订阅每周精选');
+    const hiddenTexts = subscribe.locator('[aria-hidden="true"]');
+    expect(await hiddenTexts.count()).toBeGreaterThanOrEqual(2);
+  });
+
+  test('卡片表面用 MagicCard：描边与柔光跟随指针', async ({ page }) => {
+    await gotoHome(page);
+
+    const card = page.getByTestId('site-card').first();
+    const surface = card.locator('div[style*="border-box"]').first();
+    await expect(surface).toHaveCount(1);
+
+    const readCenter = async () =>
+      surface.evaluate((el) => {
+        const style = el.getAttribute('style') ?? '';
+        const match = style.match(/circle at (-?\d+(?:\.\d+)?)px (-?\d+(?:\.\d+)?)px/);
+        return match ? { x: Number(match[1]), y: Number(match[2]) } : null;
+      });
+
+    // 未悬停时圆心被复位到卡片外（-gradientSize）
+    const idle = await readCenter();
+    expect(idle?.x ?? 0).toBeLessThan(0);
+
+    const box = await card.boundingBox();
+    if (!box) throw new Error('卡片没有渲染出来');
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.3);
+    await expect.poll(async () => (await readCenter())?.x ?? -1).toBeGreaterThan(0);
+    const moved = await readCenter();
+    expect(moved?.x).toBeGreaterThan(0);
+    expect(moved?.y).toBeGreaterThan(0);
+  });
+
+  test('顶栏阅读进度条来自 Magic UI ScrollProgress', async ({ page }) => {
+    await gotoHome(page);
+    await expect(page.locator('header').getByTestId('scroll-progress')).toHaveCount(1);
+  });
+
+  test('「推荐新站点」使用扫光按钮并可打开反馈弹窗', async ({ page }) => {
+    await gotoHome(page);
+    const shiny = page.getByTestId('recommend-site');
+    await expect(shiny).toHaveAttribute('data-shiny', 'true');
+    await shiny.click();
+    await expect(page.getByTestId('feedback-message')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expectNoDialog(page);
+  });
+});

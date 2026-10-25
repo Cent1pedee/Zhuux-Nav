@@ -6,8 +6,9 @@ import { siteConfig, navLinks } from '@/lib/config';
 import { useAppStore } from '@/components/providers/app-store';
 import { useUi } from '@/components/providers/ui';
 import { PrivacyDialog } from '@/components/dialogs';
-import { MailIcon, LogoMark } from '@/components/icons';
+import { LogoMark } from '@/components/icons';
 import { NumberTicker } from '@/components/magicui/number-ticker';
+import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-button';
 
 /**
  * 页脚：订阅入口（PRD 3.2.4）、隐私政策（PRD 4.7）、外链声明、分类快捷链接。
@@ -72,15 +73,14 @@ export function Footer() {
             <h2 className="text-[13px] font-semibold tracking-wide text-ink">关于</h2>
             <ul className="mt-2 space-y-1.5">
               <li>
-                <button
-                  type="button"
+                {/* Magic UI InteractiveHoverButton：悬停时左侧圆点铺满底色、文字右移换成箭头 */}
+                <InteractiveHoverButton
                   onClick={openSubscribe}
                   data-testid="footer-subscribe"
-                  className="flex items-center gap-1.5 text-[13px] text-muted transition-colors hover:text-primary-ink"
+                  className="px-3.5 py-1.5 text-[13px]"
                 >
-                  <MailIcon size={12} />
                   订阅每周精选
-                </button>
+                </InteractiveHoverButton>
               </li>
               <li>
                 <button

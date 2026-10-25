@@ -41,7 +41,9 @@ pnpm test              # 数据校验 + 类型 + E2E（含 axe 无障碍）
   - 图标按钮必须有 `aria-label`；
   - 补充对应 Playwright 用例（含 `data-testid`）。
 - 动效只动画 `transform` / `opacity`，并在 `prefers-reduced-motion: reduce` 下降级为 0ms。
-- 装饰性组件（`components/magicui/`）只允许用在推荐位、空态或背景层，必须 `pointer-events-none` 且 `aria-hidden`。
+- 装饰性组件（`components/magicui/`）只允许用在推荐位、空态、背景层或全局指针，装饰层必须 `pointer-events-none` 且 `aria-hidden`；`SmoothCursor` 例外（它是输入设备替代，不是装饰）。
+- 交互型 Magic UI 组件（`ShinyButton` / `InteractiveHoverButton`）必须保留 `type`、`disabled` 与 `focus-visible` 环；文字渲染多份时要 `aria-hidden` 并显式给 `aria-label`，否则读屏会念两遍。
+- 新增 Magic UI 组件后，同步在 `README.md` 的组件清单与「已知限制」第 2 条里登记。
 - 从 Magic UI 注册表取组件时同步改写为 Tailwind 3 语法：`bg-linear-to-*` → `bg-gradient-to-*`、`bg-size-[...]` → `bg-[length:...]`；新 keyframes 必须在 `tailwind.config.ts` 显式声明（内联 `animationName` 不会产出 `@keyframes`）。
 - 带遮罩（mask）的组件两层都要显式 `maskClip`（`content-box, border-box`），否则两层默认同区、相减为空，效果会完全不可见。
 - 无限循环动画必须做两件事：`useInView` 门控（只在可见时跑）+ `prefers-reduced-motion` 降级（用 `lib/use-reduced-motion.ts`）。

@@ -10,6 +10,7 @@ import { Meteors } from '@/components/magicui/meteors';
 import { ShineBorder } from '@/components/magicui/shine-border';
 import { ShimmerButton } from '@/components/magicui/shimmer-button';
 import { BlurFade } from '@/components/magicui/blur-fade';
+import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-button';
 import { AlertIcon, SearchIcon, SpinnerIcon } from '@/components/icons';
 import type { Category, Site } from '@/lib/types';
 
@@ -154,9 +155,9 @@ export function SiteGrid({
               查看全部站点
             </ShimmerButton>
             {/* 空态给出的第二条出路：直接开搜索面板，不用先去点右上角的图标 */}
-            <button type="button" onClick={() => openSearch()} data-testid="empty-open-search" className="btn-ghost">
+            <InteractiveHoverButton onClick={() => openSearch()} data-testid="empty-open-search">
               直接搜索站点
-            </button>
+            </InteractiveHoverButton>
           </div>
         </div>
       </BlurFade>

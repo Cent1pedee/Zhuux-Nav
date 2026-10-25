@@ -4,11 +4,12 @@ import { useEffect, type ReactNode } from 'react';
 import { MotionConfig } from 'motion/react';
 import { ToastProvider } from '@/components/providers/toast';
 import { ConfirmProvider } from '@/components/providers/confirm';
-import { AppStoreProvider } from '@/components/providers/app-store';
+import { AppStoreProvider, useAppStore } from '@/components/providers/app-store';
 import { UiProvider, useUi } from '@/components/providers/ui';
 import { SearchCommand } from '@/components/search-command';
 import { SettingsDialog } from '@/components/settings-dialog';
 import { FeedbackDialog, ShareDialog, SubscribeDialog } from '@/components/dialogs';
+import { SmoothCursor } from '@/components/magicui/smooth-cursor';
 import { track } from '@/lib/analytics';
 import type { SiteData } from '@/lib/data';
 
@@ -46,6 +47,19 @@ function GlobalOverlays() {
   );
 }
 
+/**
+ * Magic UI SmoothCursor 的挂载点。
+ *
+ * 放在 UiProvider 内部是为了读得到 useAppStore 的 cursorStyle ——
+ * 设置面板里可以关掉它（触控板用户可能觉得箭头碍事），偏好写进 localStorage。
+ * 组件自身还处理了：触屏设备不启用、prefers-reduced-motion 时不启用、
+ * 输入框等表单控件保留系统光标（见 globals.css 的 .smooth-cursor-on 规则）。
+ */
+function CursorLayer() {
+  const { cursorStyle } = useAppStore();
+  return <SmoothCursor enabled={cursorStyle === 'smooth'} />;
+}
+
 export function Providers({
   children,
   initialData = null,
@@ -68,6 +82,7 @@ export function Providers({
             <UiProvider>
               {children}
               <GlobalOverlays />
+              <CursorLayer />
             </UiProvider>
           </AppStoreProvider>
         </ConfirmProvider>

@@ -3,6 +3,8 @@
 export type ThemeMode = 'light' | 'dark' | 'auto';
 export type ResolvedTheme = 'light' | 'dark';
 export type Density = 'comfortable' | 'compact';
+/** 指针样式：default = 系统箭头，smooth = Magic UI 缓动箭头 */
+export type CursorStyle = 'default' | 'smooth';
 export type Consent = 'granted' | 'denied' | null;
 
 export interface Subcategory {
