@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { ConsentBanner } from '@/components/consent-banner';
-import { GridFallback } from '@/components/grid-fallback';
 import { HomeView } from '@/components/home-view';
 import { getSiteData } from '@/lib/server-data';
 import { siteConfig } from '@/lib/config';
@@ -60,13 +58,12 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
             {category.name}
           </span>
         </nav>
-        <Suspense fallback={<GridFallback count={6} />}>
-          <HomeView
-            lockedCategory={category.id}
-            heading={`${category.name}导航`}
-            intro={`${count} 个精选站点 · ${category.description}`}
-          />
-        </Suspense>
+        {/* 同上：无 JS 时内容必须直接可见，不能依赖 Suspense 的流式替换 */}
+        <HomeView
+          lockedCategory={category.id}
+          heading={`${category.name}导航`}
+          intro={`${count} 个精选站点 · ${category.description}`}
+        />
       </main>
       <div className="mx-auto max-w-shell px-3 sm:px-4">
         <Footer />

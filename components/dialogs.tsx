@@ -195,7 +195,7 @@ export function SubscribeDialog() {
               aria-describedby={error ? 'subscribe-error' : 'subscribe-hint'}
               placeholder="you@example.com"
               data-testid="subscribe-email"
-              className="h-10 w-full bg-transparent text-[13px] text-ink outline-none placeholder:text-muted/70"
+              className="h-10 w-full bg-transparent text-[13px] text-ink outline-none placeholder:text-muted"
             />
           </div>
           {error ? (
@@ -390,7 +390,7 @@ export function FeedbackDialog() {
             aria-describedby={error ? 'feedback-error' : 'feedback-count'}
             placeholder="例如：打开后返回 404，或描述与站点实际功能不符…"
             data-testid="feedback-message"
-            className="mt-1 w-full resize-none rounded-lg border border-line bg-surface/60 px-2.5 py-2 text-[13px] leading-5 text-ink outline-none placeholder:text-muted/70 focus:border-primary/60"
+            className="mt-1 w-full resize-none rounded-lg border border-line bg-surface/60 px-2.5 py-2 text-[13px] leading-5 text-ink outline-none placeholder:text-muted focus:border-primary/60"
           />
           <div className="mt-1 flex items-center justify-between">
             {error ? (
@@ -417,7 +417,7 @@ export function FeedbackDialog() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="方便我们回复你"
-            className="mt-1 h-9 w-full rounded-lg border border-line bg-surface/60 px-2.5 text-[13px] text-ink outline-none placeholder:text-muted/70 focus:border-primary/60"
+            className="mt-1 h-9 w-full rounded-lg border border-line bg-surface/60 px-2.5 text-[13px] text-ink outline-none placeholder:text-muted focus:border-primary/60"
           />
         </div>
 

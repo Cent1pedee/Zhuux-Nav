@@ -116,7 +116,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-line/60 pt-4 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {siteConfig.author} · 仅收录公开可访问的第三方站点</p>
-          <p className="text-muted/80">
+          <p className="text-muted">
             外链声明：本站不控制第三方站点的内容与隐私实践，跳转后请遵循对方条款。
           </p>
         </div>

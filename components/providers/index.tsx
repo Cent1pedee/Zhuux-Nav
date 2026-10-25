@@ -10,6 +10,7 @@ import { SearchCommand } from '@/components/search-command';
 import { SettingsDialog } from '@/components/settings-dialog';
 import { FeedbackDialog, ShareDialog, SubscribeDialog } from '@/components/dialogs';
 import { track } from '@/lib/analytics';
+import type { SiteData } from '@/lib/data';
 
 /**
  * 全局弹层挂载点：所有弹窗在此统一挂载一次，
@@ -45,7 +46,14 @@ function GlobalOverlays() {
   );
 }
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({
+  children,
+  initialData = null,
+}: {
+  children: ReactNode;
+  /** 构建期注入的站点数据：有值时首屏直接渲染真实卡片，禁用 JS 也能看到全部站点 */
+  initialData?: SiteData | null;
+}) {
   return (
     /*
      * MotionConfig 统一约束动效（PRD 7.6）：
@@ -56,7 +64,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <MotionConfig reducedMotion="user" transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
       <ToastProvider>
         <ConfirmProvider>
-          <AppStoreProvider>
+          <AppStoreProvider initialData={initialData}>
             <UiProvider>
               {children}
               <GlobalOverlays />

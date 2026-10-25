@@ -38,7 +38,7 @@ export function SiteGrid({
   onFeedback,
   onRetry,
 }: SiteGridProps) {
-  const { status, density, hydrated } = useAppStore();
+  const { status, density } = useAppStore();
   const { openSearch } = useUi();
   const stagger = sites.length <= 30;
   const categoryMap = useMemo(
@@ -77,7 +77,18 @@ export function SiteGrid({
     );
   }
 
-  if (status === 'loading' || !hydrated) {
+  /*
+   * 只有「真的没数据」才显示骨架：
+   * - status === 'loading'：运行时重新拉取数据
+   * - totalCount === 0：一份站点都没有（构建期数据缺失的兜底）
+   *
+   * 这里刻意不再判断 `!hydrated`：构建期数据已灌进 Provider，
+   * 首屏 HTML 就是真实卡片，若因水合未完成而强制渲染骨架，
+   * 会让「禁用 JS 也能看到站点」这条彻底失效（骨架会一直停在那里）。
+   * 注意用 totalCount 而不是 sites.length —— 后者是筛选后的结果，
+   * 筛到 0 条时应走下面的空态分支，而不是退化成骨架。
+   */
+  if (status === 'loading' || totalCount === 0) {
     /*
      * 骨架卡片的占位高度必须贴近真实卡片（实测舒适 188px / 紧凑 176px），
      * 否则数据到达后网格会突然变高，整页内容被推下去，直接拉高 CLS（PRD 4.1 要求 < 0.1）。

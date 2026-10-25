@@ -16,7 +16,7 @@
 | `pnpm build`                  | 校验数据 → 同步数据 → 静态导出到 `out/`            |
 | `pnpm preview`                | 用内置静态服务器预览 `out/`                        |
 | `pnpm check`                  | 数据校验 + 类型检查 + lint + 构建                  |
-| `pnpm test:e2e`               | Playwright 端到端 + axe 无障碍（63 用例 / 71 次执行） |
+| `pnpm test:e2e`               | Playwright 端到端 + axe 无障碍（64 用例 / 72 次执行） |
 | `pnpm test`                   | 数据校验 + 类型检查 + E2E                          |
 
 `pnpm build` 会先跑 `scripts/validate-data.mjs`，数据格式不合法时**构建直接失败**。E2E 使用本机 Google Chrome（`channel: 'chrome'`），无需下载 Playwright 浏览器；若本机无 Chrome，执行 `pnpm exec playwright install chromium` 并把 `playwright.config.ts` 的 `channel` 改为 `'chromium'`。
@@ -29,7 +29,7 @@
 | hover 显示完整描述与分类标签                      | 描述固定两行、卡片高度恒定；被截断时用 `ResizeObserver` 判定，在卡片外弹出完整描述浮层                                              |
 | 分类导航（二级分类、当前高亮）                    | **单选导航**语义：点一级只看该分类，点二级只看该二级（非叠加筛选），标题变为「开发工具 · 代码托管」并出现面包屑                      |
 | 全局搜索、输入即出下拉、键盘上下 + 回车           | `lib/search.ts` 加权打分（名称 > 标签 > 分类 > 描述）；↑/↓/Home/End + Enter + Esc；`/?q=` 深链接自动开面板并预填                    |
-| 静态数据读取、骨架屏、加载失败重试                | 运行时 `fetch('/data/sites.json')`；骨架屏尺寸对齐真实卡片（避免 CLS）；`error-state` + `retry-button`                               |
+| 静态数据读取、骨架屏、加载失败重试                | 构建期把站点数据注入页面（禁用 JS 也能看到全部卡片与真实站点数），客户端再做一次后台校验；骨架屏只在重试时出现且尺寸对齐真实卡片；`error-state` + `retry-button` |
 | 卡片星标收藏、导出 / 导入 JSON                    | `favorite-button`（`aria-pressed`）；导出文件带 `exportedAt/source/count/sites`                                                      |
 | 站点反馈、分享                                    | 卡片「更多」菜单 → 反馈表单；顶栏分享复制页面或分类链接，支持 `navigator.share`，回退剪贴板 + toast                                  |
 | 订阅                                              | 页脚「订阅每周精选」→ 邮箱校验 → 模拟提交成功态                                                                                     |
@@ -55,20 +55,20 @@ tests/e2e/      Playwright 用例（home / interactions / a11y / privacy-seo / r
 
 1. 编辑 `data/categories.json` 与 `data/sites.json`，字段与约束见 [CONTRIBUTING.md](CONTRIBUTING.md#数据规范)。
 2. `pnpm validate:data` 校验（id 必须 kebab-case 且唯一、分类必须存在、URL 必须 http(s)）。
-3. `pnpm build` 会自动同步到 `public/data/`；需要本地 favicon 时执行 `node scripts/fetch-icons.mjs`。
+3. `pnpm build` 会自动同步到 `public/data/`，并把数据在构建期注入页面（所以加站点后要重新构建）；需要本地 favicon 时执行 `node scripts/fetch-icons.mjs`。
 
 ## 测试
 
 ```bash
 pnpm check              # 数据校验 → tsc → eslint → 静态构建（13 个页面）
 pnpm preview            # 另开终端，http://127.0.0.1:4321
-pnpm test:e2e           # Playwright + axe：桌面端 63 条 + 移动端复跑 8 条响应式 = 71 次执行
+pnpm test:e2e           # Playwright + axe：桌面端 64 条 + 移动端复跑 8 条响应式 = 72 次执行
 pnpm test:e2e:ui        # 可视化调试
 ```
 
 | 文件                             | 条数 | 覆盖                                                                                                                         |
 | -------------------------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `tests/e2e/home.spec.ts`         | 21   | 首屏网格与语义结构、骨架屏、加载失败重试、二级分类单选与返回全部、`?q=` 预填、空态搜索入口、阅读进度条、切分类回顶、主题、密度、Magic UI 装饰层仅推荐位、主按钮扫光层不拦截点击、搜索裁切模糊提示 |
+| `tests/e2e/home.spec.ts`         | 22   | 首屏网格与语义结构、重试时骨架屏、加载失败重试、二级分类单选与返回全部、`?q=` 预填、空态搜索入口、阅读进度条、切分类回顶、主题、密度、Magic UI 装饰层仅推荐位、主按钮扫光层不拦截点击、搜索裁切模糊提示 |
 | `tests/e2e/interactions.spec.ts` | 16   | 搜索键盘与新窗口、⌘K/Esc 焦点归还、埋点、收藏持久化、导入导出、浏览历史、嵌套弹层、分享、订阅、反馈                            |
 | `tests/e2e/a11y.spec.ts`         | 7    | axe 扫描（首页/搜索层/设置层/分类页/隐私页）、Tab 顺序、弹层内 Tab 循环、图标按钮可访问名称                                     |
 | `tests/e2e/privacy-seo.spec.ts`  | 11   | 同意横幅、隐私弹窗与独立页、清除本地数据、`localStorage` 异常降级、meta/OG/JSON-LD、sitemap/robots、404                        |
@@ -100,9 +100,11 @@ pnpm test:e2e:ui        # 可视化调试
 
 ## 已知限制
 
-1. **首屏 JS 约 233KB gzip**（`out/index.html` 的 script 逐文件 gzip 求和，排除 `noModule` 的 polyfills 38.5KB）：主要来自 Next.js App Router + React 19 运行时（约 103KB）与 Motion（约 46KB）。如需更小体积，可换用更轻的运行时。
-2. **只引入 Magic UI，未引入 shadcn/ui**：`components/magicui/` 下 9 个组件全部改写为 Tailwind 3 语法并补 `prefers-reduced-motion` 降级——`BorderBeam`（推荐位绕边流光）、`Meteors`（空态流星）、`ShineBorder`（空态与搜索无结果描边）、`GridPattern`（背景网格）、`BlurFade`（空态淡入）、`NumberTicker`（站点数滚动）、`ShimmerButton`（主按钮扫光）、`AnimatedGradientText`（404 渐变字）、`ProgressiveBlur`（搜索列表裁切提示）。弹窗、命令面板、Toast 仍是自建：现有实现带弹层栈、滚动锁补偿与倒计时条，换成 Radix 版本需重做且体积更大（实测 +46KB gzip）。
-3. **深色模式辅助文字用 `#94949E`**：更深一档的 `#71717A` 在卡片底色 `#18181B` 上对比度仅 3.65:1，达不到 WCAG AA 的 4.5:1。
-4. **收藏拖拽排序未实现**；统计工具仅保留接口与本地缓冲，未接入真实 Umami / Plausible（`siteConfig.analytics.endpoint` 留空）。
-5. **favicon 为构建前抓取到 `public/icons/` 的本地文件**（等价自有 CDN），运行时 `loading="lazy"` + 固定宽高 + 首字母占位兜底。
-6. **无 JS 时只有外壳可用**：站点数据是运行时 `fetch('/data/sites.json')` 拿的，禁用 JS 时卡片区停在骨架屏，页头、页脚、分类链接与 `/privacy/` 仍可访问（有 E2E 守住这条底线）。若要连卡片也能在无 JS 下渲染，需要把数据在构建期灌进页面，代价是每加一个站点都要重新构建。
+1. **首屏 JS 约 195KB gzip**（`out/index.html` 的 script 逐文件 gzip 求和，排除 `noModule` 的 polyfills 38.6KB）：主要来自 Next.js App Router + React 19 运行时（约 103KB）与 Motion（约 46KB）。如需更小体积，可换用更轻的运行时。
+
+2. **UI 组件只用了 Magic UI，没用 shadcn/ui**：`components/magicui/` 下 9 个组件全部改写为 Tailwind 3 语法并补 `prefers-reduced-motion` 降级——`BorderBeam`（推荐位绕边流光）、`Meteors`（空态流星）、`ShineBorder`（空态与搜索无结果描边）、`GridPattern`（背景网格）、`BlurFade`（空态淡入）、`NumberTicker`（站点数滚动）、`ShimmerButton`（主按钮扫光）、`AnimatedGradientText`（404 渐变字）、`ProgressiveBlur`（搜索列表裁切提示）。弹窗、命令面板、Toast 仍是自建：现有实现带弹层栈、滚动锁补偿与倒计时条，换成 Radix 版本需重做且体积更大（实测 +46KB gzip）。
+
+3. **收藏拖拽排序未实现**；统计工具仅保留接口与本地缓冲，未接入真实 Umami / Plausible（`siteConfig.analytics.endpoint` 留空）。
+
+4. **favicon 是构建前抓取的本地文件**（`public/icons/`，等价自有 CDN）：76 个图标统一压到 128px 以内、合计 387KB，运行时 `loading="lazy"` + 固定宽高 + 首字母兜底。
+

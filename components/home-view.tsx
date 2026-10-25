@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'motion/react';
 import { SiteGrid } from '@/components/site-grid';
 import { CategoryNav, CurrentScope } from '@/components/category-nav';
@@ -12,6 +12,7 @@ import { useToast } from '@/components/providers/toast';
 import { filterSites } from '@/lib/data';
 import { NumberTicker } from '@/components/magicui/number-ticker';
 import { cn } from '@/lib/cn';
+import { subscribeLocationChange } from '@/lib/history';
 import { StarIcon, ClockIcon, GridIcon, RowsIcon, ArrowUpRightIcon, SearchIcon } from '@/components/icons';
 
 interface HomeViewProps {
@@ -32,11 +33,32 @@ export function HomeView({ lockedCategory, heading, intro }: HomeViewProps) {
   const { openSettings, openFeedback, openSearch } = useUi();
   const { toast } = useToast();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+
+  /*
+   * 查询串刻意不用 next/navigation 的 useSearchParams：
+   * 该 hook 会把整棵子树推进 Suspense 边界，`output: 'export'` 下静态 HTML
+   * 里就只剩骨架（实测 out/index.html 的卡片数为 0），
+   * 于是「禁用 JS 也能看到站点」这条彻底失效。
+   * 这里自己从 window.location 读，SSR 首帧为空串、水合后再同步，
+   * 既能保留真实卡片，也不影响深链接解析。
+   */
+  const [searchKey, setSearchKey] = useState('');
 
   const [categoryId, setCategoryId] = useState<string | null>(lockedCategory ?? null);
   const [subcategoryId, setSubcategoryId] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * 同步查询串：首次挂载、客户端路由切换（pathname 变化）、浏览器前进后退，
+   * 以及 Next <Link> 走的 pushState（不会触发 popstate，见 lib/history.ts）。
+   * 这一条是「点 Logo 回首页要清空侧栏分类」的关键：
+   * 从 /?c=design 到 / 时 pathname 不变、只有查询串变，只监听 pathname 会漏掉。
+   */
+  useEffect(() => {
+    const sync = () => setSearchKey(window.location.search);
+    sync();
+    return subscribeLocationChange(sync);
+  }, [pathname]);
 
   /*
    * 切换分类后把视口带回内容顶部。
@@ -73,7 +95,6 @@ export function HomeView({ lockedCategory, heading, intro }: HomeViewProps) {
    * 自己写 URL 用的是 history.replaceState，不会触发 Next 的路由更新，
    * 所以不会与本 effect 形成回环。
    */
-  const searchKey = searchParams.toString();
   useEffect(() => {
     if (lockedCategory) return;
     // 数据未就绪时不做解析；categories 进入依赖，就绪后会自动再跑一次
@@ -230,17 +251,31 @@ export function HomeView({ lockedCategory, heading, intro }: HomeViewProps) {
               </motion.span>
             </h1>
             <p className="mt-1 text-meta text-muted">
-              {intro ?? (
-                <>
-                  {/* 切分类时数字滚动到新值，比整段文字硬替换更容易被眼睛跟上 */}
-                  <NumberTicker
-                    value={hasScope ? visible.length : sites.length}
-                    duration={0.6}
-                    className="font-medium text-ink"
-                  />
-                  {' 个站点 · 点击卡片在新窗口打开'}
-                </>
-              )}
+              {intro ??
+                (hasScope && visible.length === 0 ? (
+                  // 空分类下再写「0 个站点 · 点击卡片打开」是自相矛盾的引导，换一句说明
+                  <>
+                    这个分类暂时还没有收录站点，可以
+                    <button
+                      type="button"
+                      onClick={clearScope}
+                      className="mx-1 font-medium text-primary-ink underline-offset-2 hover:underline"
+                    >
+                      查看全部站点
+                    </button>
+                    或直接搜索。
+                  </>
+                ) : (
+                  <>
+                    {/* 切分类时数字滚动到新值，比整段文字硬替换更容易被眼睛跟上 */}
+                    <NumberTicker
+                      value={hasScope ? visible.length : sites.length}
+                      duration={0.6}
+                      className="font-medium text-ink"
+                    />
+                    {' 个站点 · 点击卡片在新窗口打开'}
+                  </>
+                ))}
             </p>
           </div>
           <div className="flex items-center gap-1.5">

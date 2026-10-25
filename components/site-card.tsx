@@ -16,22 +16,15 @@ import type { Category, Site } from '@/lib/types';
 /** favicon：固定尺寸 + 懒加载 + 失败兜底为字母块（PRD 4.1 / 4.4） */
 export function SiteIcon({ site, size = 38 }: { site: Site; size?: number }) {
   const [failed, setFailed] = useState(false);
-  /**
-   * 图标解码完成前先留一个同尺寸的占位：favicon 是懒加载的，
-   * 直接出现会有一帧「空框 → 图像」的跳变，滚动时尤其明显。
-   * 解码完成后只做一次 200ms 淡入，不改变布局尺寸。
-   */
-  const [loaded, setLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
   const letter = site.name.trim().charAt(0).toUpperCase();
 
   /*
-   * 命中缓存时 onLoad 可能在 React 挂上监听之前就触发过了，
-   * 那样图标会一直停在 opacity-0。挂载后补一次 complete 检查兜底。
+   * 淡入交给 CSS 的 animate-fade-in，而不是用 JS 状态切 opacity。
+   * 原因：构建期数据已灌进页面，禁用 JS 时卡片本身就是可见的，
+   * 若靠 onLoad 才能把 opacity 从 0 改到 1，那么没有 JS 的访问者
+   * 会看到一排「空白方块」——图标永远不出现。
+   * 本地 PNG 只有 128px，解码几乎瞬时，CSS 淡入足够顺滑。
    */
-  useEffect(() => {
-    if (imgRef.current?.complete) setLoaded(true);
-  }, []);
   return (
     <span
       className="relative grid shrink-0 place-items-center overflow-hidden rounded-[10px] border border-line/80 bg-surface/90 transition-[transform,border-color,box-shadow] duration-300 ease-silk group-hover:-rotate-3 group-hover:scale-[1.08] group-hover:border-primary/35 group-hover:shadow-[0_6px_16px_-8px_rgb(var(--c-primary)/0.55)]"
@@ -43,7 +36,6 @@ export function SiteIcon({ site, size = 38 }: { site: Site; size?: number }) {
       ) : (
         // eslint-disable-next-line @next/next/no-img-element -- 图标为本地小尺寸 PNG，无需 next/image 优化
         <img
-          ref={imgRef}
           src={iconSrc(site)}
           alt=""
           width={size}
@@ -51,13 +43,9 @@ export function SiteIcon({ site, size = 38 }: { site: Site; size?: number }) {
           loading="lazy"
           decoding="async"
           onError={() => setFailed(true)}
-          onLoad={() => setLoaded(true)}
           // 内边距随尺寸缩放：固定 6px 在 16px 的小图标里会只剩 4px 可见区域
           style={{ padding: Math.max(1, Math.round(size * 0.16)) }}
-          className={cn(
-            'h-full w-full object-contain transition-opacity duration-200 ease-silk',
-            loaded ? 'opacity-100' : 'opacity-0',
-          )}
+          className="h-full w-full animate-fade-in object-contain"
         />
       )}
     </span>

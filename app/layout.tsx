@@ -3,6 +3,7 @@ import './globals.css';
 import { siteConfig } from '@/lib/config';
 import { Providers } from '@/components/providers';
 import { PageBackdrop } from '@/components/page-backdrop';
+import { getSiteData } from '@/lib/server-data';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -100,6 +101,13 @@ const jsonLd = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  /*
+   * 构建期把站点数据灌进 Provider：
+   * 首屏 HTML 里就带真实卡片（不再依赖运行时 fetch），因此禁用 JS 时
+   * 卡片、分类、收藏入口全都可读可点，满足「无 JS 仍可访问」的底线。
+   * 运行时仍有 /data/sites.json 可重新拉取（reload），两者共用同一份校验逻辑。
+   */
+  const initialData = getSiteData();
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
@@ -118,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           跳到主要内容
         </a>
-        <Providers>{children}</Providers>
+        <Providers initialData={initialData}>{children}</Providers>
       </body>
     </html>
   );

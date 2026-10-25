@@ -84,9 +84,19 @@ export function AppStoreProvider({
   const requestId = useRef(0);
 
   /* ---------- 数据加载：骨架屏 → 就绪 / 失败空态（PRD 3.1.5） ---------- */
-  const load = useCallback(async () => {
+  /*
+   * `revalidate` 用于「构建期已注入数据」时的后台校验：
+   * 不切到 loading —— 否则首屏会把已经渲染好的卡片换成骨架，白白闪一下。
+   * 但失败仍然要进 error：PRD 3.1.5 明确要求「加载失败空态 + 重试按钮」，
+   * 这个状态必须真实可达，不能因为内嵌了数据就把它藏起来。
+   * 只有「手上没有任何数据」时才走完整的 骨架 → 就绪 / 失败 流程。
+   */
+  const load = useCallback(async (options?: { revalidate?: boolean }) => {
+    const revalidate = options?.revalidate === true;
     const id = ++requestId.current;
-    setStatus('loading');
+    if (!revalidate) {
+      setStatus('loading');
+    }
     setError(null);
     try {
       const [sitesRes, catsRes] = await Promise.all([
@@ -103,6 +113,7 @@ export function AppStoreProvider({
       setSites(result.data.sites);
       setCategories(result.data.categories);
       setStatus('ready');
+      setError(null);
     } catch (err) {
       if (id !== requestId.current) return;
       setStatus('error');
@@ -133,7 +144,8 @@ export function AppStoreProvider({
     setAnalyticsConsent(storedConsent);
 
     setHydrated(true);
-    if (!initialData) void load();
+    // 有构建期数据时只做校验（不闪骨架），没有时走完整加载流程
+    void load({ revalidate: Boolean(initialData) });
   }, [load, initialData]);
 
   /* ---------- auto 模式跟随系统（PRD 3.3） ---------- */

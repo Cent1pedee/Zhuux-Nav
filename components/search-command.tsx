@@ -195,7 +195,7 @@ export function SearchCommand({ open, onClose, initialQuery = '' }: SearchComman
           autoComplete="off"
           spellCheck={false}
           data-testid="search-input"
-          className="h-14 w-full bg-transparent text-[15px] text-ink outline-none placeholder:text-muted/80"
+          className="h-14 w-full bg-transparent text-[15px] text-ink outline-none placeholder:text-muted"
         />
         {pending ? <SpinnerIcon size={15} className="text-muted" /> : null}
         <kbd className="hidden shrink-0 rounded border border-line px-1.5 py-0.5 font-mono text-[12px] text-muted sm:block">
