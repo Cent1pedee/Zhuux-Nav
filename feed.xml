@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Zhuux导航页 · 更新日志</title>
+  <subtitle>面向技术从业者的高效导航页：精选开发工具、设计资源、云服务、社区与 AI 工具，支持分类过滤、全局搜索、收藏与深浅色主题。</subtitle>
+  <link href="https://nav.zhuux.cn/feed.xml" rel="self"/>
+  <link href="https://nav.zhuux.cn/changelog/"/>
+  <id>https://nav.zhuux.cn/</id>
+  <updated>2026-11-14T00:00:00+08:00</updated>
+  <author>
+    <name>煮雪话河山</name>
+  </author>
+  <entry>
+    <title>移动端：更紧的卡片节奏与更少的紫色</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-14"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-14</id>
+    <updated>2026-11-14T00:00:00+08:00</updated>
+    <summary>· 「我的收藏 / 最近浏览」的区块标题降到 17px 并去掉装饰图标，页面标题重新成为唯一的一级标题
+· 卡片描述不再强占两行高度：单行描述的卡片不再在描述与标签之间留出 20px 空白，卡片高度从固定 166px 变成 144 / 163px 两种
+· 详情页四个操作按钮在手机上排成 2×2 等宽网格，不再是「三个挤一行、反馈单独掉一行」
+· 移动端主按钮去掉一直在转的扫光，搜索框与结果行去掉紫色光环，顶部滚动进度条改为一条实色
+· 收藏页说明压成一行短句，页脚「关于」在手机上改成两列，少滚约 200px</summary>
+  </entry>
+  <entry>
+    <title>白色底、右侧抽屉、首屏骨架与 Base UI Toast</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-13"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-13</id>
+    <updated>2026-11-13T00:00:00+08:00</updated>
+    <summary>· 首屏先显示 shadcn/ui Skeleton 卡片占位（图标、标题、两行描述、标签），加载完成后与真实卡片交叉淡化；禁用 JS 时骨架自动隐藏、卡片直接可读
+· 主题切换通知改成逐条堆叠，带模式图标与「下次切到哪」提示，并加自动消失进度条与更柔和的进出场
+· 修复点击收藏后控制台出现「ResizeObserver loop completed with undelivered notifications」：通知内容不再撑满根节点，避免与 Base UI 的高度自测形成回环
+· Toast 迁移到 shadcn/ui 的 Base UI 版本：右下角牌堆叠放、悬停展开、最多 4 条，文案与触发逻辑不变
+· 浅色主题的页面底色改为纯白，48px 网格保留并把线色提到 4%，让网格承担层次而不是靠米色底
+· 设置从居中模态框改为右侧滑出的 Drawer（shadcn/ui + vaul），Esc、焦点循环、滚动锁与焦点归位全部保留
+· 我的收藏「新建分组」补齐与分组标签同高的下边框与内距，按钮不再比同级高出一截</summary>
+  </entry>
+  <entry>
+    <title>安静的索引：一次去 AI 味的视觉重做</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-13"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-13</id>
+    <updated>2026-11-13T00:00:00+08:00</updated>
+    <summary>· 全站配色回到纸面 / 石墨底色，只保留一个紫色强调色：去掉紫蓝渐变、光斑与玻璃拟态，背景保留 48px 网格底纹
+· 侧栏分类与排序控件回到有动效的版本：选中块用 spring 在项目间滑动，卡片悬停轻微抬起；搜索筛选与收藏分组改用 2px 下划线
+· 卡片标签改成用圆点串联的索引行；分类归属只在详情页与面包屑出现，一张卡片只留一层 1px 描边
+· 站点详情、更新日志、隐私政策收敛为居中的 768px 阅读列，分节改用细线，不再一屏堆满卡片
+· 「推荐新站点」的扫光改为悬停触发，订阅按钮的圆点铺满改为 10% 主色填充，常驻动画不再抢注意力
+· 删除空态的流星与绕边扫光，Magic UI 组件从 14 个减到 11 个，首屏约 282KB
+· 推荐位卡片改用主色描边 + 顶部柔光 + 域名行「推荐」标签，替换原先几乎看不见的左侧竖条
+· 更新日志的类型标签改为单色文字标签，五种彩色小胶囊合并为一列可扫读的标尺
+· 分享图与 PWA / iOS 图标换成同一套索引卡标记：石墨卡面、纸色横线、紫色索引标签，右侧附分类索引表
+· 排印收口：标题收紧字距与行高、正文行高 1.6、数字改等宽对齐；欢迎弹窗与空态文案各减一句</summary>
+  </entry>
+  <entry>
+    <title>稳定性与视觉收口</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-12"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-12</id>
+    <updated>2026-11-12T00:00:00+08:00</updated>
+    <summary>· 通知改为 shadcn base toast：标题 + 描述 + 右上角关闭键，去掉图标圆底与左侧色条，固定 64px 高
+· 推荐位改为 30% 主色描边 + 常驻顶部柔光 + 图标光晕，不再叠绕边流光
+· 移除首页标题栏的重复搜索框，全站只保留顶栏一个搜索入口
+· 弹窗打开时不再有可见位移：面板不做入场动画，只保留遮罩淡入
+· 隐藏的 radio / file 控件不再撑出横向滚动条，反馈与设置弹窗内部宽度稳定
+· 订阅与反馈弹窗的错误行、成功态与面板高度固定，文字不再跳动
+· 关闭键去掉悬停旋转与按压缩放，面板出现时不会因指针停留而额外移动
+· 推荐新站点的扫光改用 transform 合成层动画，不再重绘整块按钮</summary>
+  </entry>
+  <entry>
+    <title>shadcn/ui 组件体系</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-11"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-11</id>
+    <updated>2026-11-11T00:00:00+08:00</updated>
+    <summary>· 全站控件迁移到 shadcn/ui + Radix：弹窗、通知、确认框、下拉、选择器、按钮、输入框、面包屑、排序与筛选
+· 搜索入口改为 36px 高的搜索字段，面板加宽到 672px，输入区、筛选胶囊与结果栅格重排
+· 排序与搜索筛选支持方向键，选中态与 aria-pressed 同步
+· 主题切换改用 Magic UI AnimatedThemeToggler，连点不丢点击、提示不堆叠
+· 嵌套弹层第二次 Esc 不再丢失，滚动锁不残留
+· Toast 不再抢走 Esc；只在没有菜单 / 选择器时关闭最上层弹窗
+· 弹窗开合时背景不再横向位移，菜单不再被裁剪
+· 浅色主题下的对比度与跨页样式统一
+· 主题过渡改为快照交叉淡化，约 42fps → 59fps；滚动 p95 22.8ms → 18.8ms
+· Modal / Toast / Confirm 保留原 API 与业务语义，内部换成 Radix；首屏约 235KB → 285KB，预算改为只测量</summary>
+  </entry>
+  <entry>
+    <title>站点详情、导入与分发</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-09"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-09</id>
+    <updated>2026-11-09T00:00:00+08:00</updated>
+    <summary>· 新增 76 个站点详情页：摘要、标签、同类站点、外链状态、收藏 / 备注 / 分享 / 反馈
+· 收藏支持书签 HTML 与分组导入，导入前预览；导出书签保留分组文件夹
+· 搜索筛选写入 URL，可直接分享；页脚新增 RSS，构建期生成 Atom feed
+· 新增 /changelog/ 页面与离线兜底页；Issue JSON 校验导入、外链巡检三态、sitemap 使用真实更新日期
+· 矮视口下卡片描述浮层不再跑出屏幕，改为一次测量上下空间 + 内部滚动
+· 含点号的标签（如 Node.js）不再丢失尾斜杠，canonical 与 sitemap 统一
+· 数据请求失败时不再把 SSR 卡片替换成错误态，PWA 离线打开仍可用
+· store 切四片 context，卡片 / 顶栏 / 页脚按片订阅；ResizeObserver 实例 76 → 2
+· 拆分 dialogs / site-card / favorites，页面骨架与面包屑收敛为公共组件</summary>
+  </entry>
+  <entry>
+    <title>收藏分组、标签与 PWA</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-07"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-07</id>
+    <updated>2026-11-07T00:00:00+08:00</updated>
+    <summary>· 标签索引页 + 137 个标签落地页；搜索加入拼音首字母 / 全拼 / 一字符手误加分
+· 网格工具条：默认 / A-Z / 精选排序、只看推荐、随便看看；卡片支持备注与外链健康三态
+· 收藏分组：新建 / 重命名 / 删除 / 移动，旧收藏自动迁移；整卡拖拽、浮层跟随与键盘排序
+· 最近浏览页、PWA 安装与离线缓存、推荐新站点（预填 Issue）与书签导出
+· 触屏拖拽不再被 pointercancel 取消；修复粘滞 hover、双击缩放与过小的点击区域
+· 分类页侧栏改为真链接；最近浏览「昨天」不再随机消失，跨零点自动翻页
+· 含斜杠的标签（CI/CD）不再生成 404；卡片「更多」菜单不再被裁剪
+· 移动端 76 卡滚动长任务 539ms → 0，最长帧 183ms → 50ms
+· 统一 5 档断点，安全区、100dvh、触控命中区与骨架高度随断点调整</summary>
+  </entry>
+  <entry>
+    <title>响应式、可访问性与工程化</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-11-05"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-11-05</id>
+    <updated>2026-11-05T00:00:00+08:00</updated>
+    <summary>· 页面加载即弹的站点公告，支持「不再提示」；?q= 深链接与存储不可用时自动让位
+· 页脚分类改为数据驱动，新增回到顶部；隐私入口区分弹层与独立页
+· 新增 /favorites/ 收藏页，收藏有了完整出口
+· 路由级 / 根级错误边界与客户端错误上报、Vercel 安全响应头、构建期域名守卫
+· 弹窗焦点劫持修复，Esc 只关最上层，Tab 不再跑到背景页面
+· 首帧主题与卡片密度不再闪烁
+· 移动端二级分类独立层级，跨端断点 / 安全区 / 触控缺陷修复
+· 深色辅助文字对比度、favicon 与无 JS 图标空白修复
+· 消除移动端滚动长任务，76 卡在 6 倍降速下不掉帧
+· 数据校验收敛为单一实现；40 条单测接入 CI；部署收敛为 CI → 公开产物库 → Vercel</summary>
+  </entry>
+  <entry>
+    <title>项目初始化与 Magic UI</title>
+    <link href="https://nav.zhuux.cn/changelog/#2026-10-25"/>
+    <id>https://nav.zhuux.cn/changelog/#2026-10-25</id>
+    <updated>2026-10-25T00:00:00+08:00</updated>
+    <summary>· 首批分类与站点上线，支持分类过滤、全局搜索、收藏与深浅色主题
+· 数据在构建期注入，禁用 JS 也能看到全部卡片、真实站点数与分类链接
+· 接入 14 个 Magic UI 组件：BorderBeam、Meteors、GridPattern、ShineBorder、BlurFade、NumberTicker、ShimmerButton、ProgressiveBlur、AnimatedGradientText、SmoothCursor、ShinyButton、InteractiveHoverButton、MagicCard、ScrollProgress
+· 品牌统一为 Zhuux 导航页，manifest 与 OG 图由 siteConfig 生成
+· 点 Logo 回首页不再清空已选分类
+· 修正 favicon 后缀与内容不符；图标不再依赖 onLoad，无 JS 时也有内容
+· 深色辅助文字 #94949E → #7E7E87，达到 WCAG AA
+· 首屏 195KB → 201KB 阶段记录；卡片描边与柔光跟随指针；阅读进度条
+· Magic UI 组件统一改写为 Tailwind 3 语法，并补 prefers-reduced-motion 降级</summary>
+  </entry>
+</feed>

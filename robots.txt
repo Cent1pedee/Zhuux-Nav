@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: nav.zhuux.cn
+Sitemap: https://nav.zhuux.cn/sitemap.xml
